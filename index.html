@@ -226,8 +226,7 @@
                 &copy; 2026 <span id="dyn-foot-copyright">Mi Tienda</span> - Todos los derechos reservados.
             </div>
         </div>
-    </footer><!-- MODAL DEL CARRITO DE COMPRAS -->
-    <div class="modal" id="cart-modal">
+    </footer><div class="modal" id="cart-modal">
         <div class="modal-content">
             <button class="modal-close" onclick="toggleModal('cart-modal')">&times;</button>
             <h2><i class="fa-solid fa-basket-shopping"></i> Tu Carrito</h2>
@@ -237,10 +236,26 @@
                 <label>Nombre y Apellido</label>
                 <input type="text" id="order-name" class="form-control" placeholder="Ej: María Luz">
             </div>
+
             <div class="form-group">
-                <label>Dirección de Entrega</label>
-                <input type="text" id="order-address" class="form-control" placeholder="Ej: Urquiza 450">
+                <label>Método de Entrega / Envío</label>
+                <select id="order-delivery" class="form-control" onchange="updateDeliveryDisclaimer()">
+                    <option value="Retiro en el local">Retiro en el Local (Sin Cargo)</option>
+                    <option value="Envío a domicilio con cargo">Envío a domicilio (Con Cargo adicional)</option>
+                    <option value="Envío gratis (Miércoles o Sábado)">Envío GRATIS (Miércoles o Sábados)</option>
+                </select>
             </div>
+
+            <div id="delivery-disclaimer" style="background: var(--gray); padding: 12px; border-radius: 12px; font-size: 0.85rem; line-height: 1.4; border-left: 4px solid var(--primary); margin-bottom: 12px;">
+                <strong>📍 Información de Retiro:</strong><br>
+                Podés retirar de lunes a viernes en nuestros horarios habituales. Recordá coordinar previamente.
+            </div>
+
+            <div class="form-group" id="address-group" style="display:none;">
+                <label>Dirección de Entrega</label>
+                <input type="text" id="order-address" class="form-control" placeholder="Ej: Urquiza 450, San Benito / Paraná">
+            </div>
+
             <div class="form-group">
                 <label>Método de Pago</label>
                 <select id="order-payment" class="form-control">
@@ -248,19 +263,22 @@
                     <option value="Transferencia">Transferencia</option>
                 </select>
             </div>
+
+            <div style="background: #FEE2E2; color: #991B1B; padding: 10px 12px; border-radius: 12px; font-size: 0.8rem; font-weight: 500; margin-top: 10px; display: flex; gap: 8px; align-items: start;">
+                <i class="fa-solid fa-triangle-exclamation" style="margin-top: 2px;"></i>
+                <span><strong>Aviso importante:</strong> Por cuestiones de higiene y seguridad sanitaria, las camitas y las capas <strong>no tienen cambio ni devolución</strong>.</span>
+            </div>
             
             <div id="cart-total" style="font-size: 1.2rem; font-weight: 700; text-align: right; margin-top: 15px;">Total: $0</div>
             <button class="btn-submit" onclick="sendOrder()"><i class="fa-brands fa-whatsapp"></i> Enviar Pedido por WhatsApp</button>
         </div>
     </div>
 
-    <!-- PANEL DE CONTROL AVANZADO Y QUIRÚRGICO DE DISEÑO -->
     <div class="modal" id="admin-modal">
         <div class="modal-content">
             <button class="modal-close" onclick="toggleModal('admin-modal')">&times;</button>
             <h2><i class="fa-solid fa-gear"></i> Panel de Control Total</h2>
             
-            <!-- INTERRUPTOR DE VISIBILIDAD DE STOCK -->
             <div class="toggle-container" style="margin-top: 15px;">
                 <span class="toggle-label"><i class="fa-solid fa-eye"></i> Mostrar unidades exactas de stock</span>
                 <label class="switch">
@@ -269,7 +287,6 @@
                 </label>
             </div>
 
-            <!-- CONFIGURACIÓN DE IDENTIDAD Y CONTROLES DE COLOR DIFERENCIADOS -->
             <div class="admin-section">
                 <h4><i class="fa-solid fa-palette"></i> Identidad y Paleta Quirúrgica</h4>
                 <div class="form-group">
@@ -285,7 +302,6 @@
                     <input type="text" id="cfg-store-logo" class="form-control">
                 </div>
                 
-                <!-- SELECTORES DE COLOR INDEPENDIENTES -->
                 <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 10px;">
                     <div class="form-group">
                         <label>Color de Botones y Detalles</label>
@@ -314,7 +330,6 @@
                 </div>
             </div>
 
-            <!-- PERSONALIZAR BANNER PROMOCIONAL -->
             <div class="admin-section">
                 <h4><i class="fa-solid fa-image"></i> Personalizar Banner Promocional</h4>
                 <div class="form-group">
@@ -329,7 +344,7 @@
                     <label>Ícono (Ej: fa-bone, fa-paw, fa-star)</label>
                     <input type="text" id="cfg-banner-icon" class="form-control">
                 </div>
-            </div><!-- CONFIGURACIÓN DE CONTACTO, REDES Y SOBRE NOSOTROS -->
+                        </div><!-- CONFIGURACIÓN DE CONTACTO, REDES Y SOBRE NOSOTROS -->
             <div class="admin-section">
                 <h4><i class="fa-solid fa-address-book"></i> Contacto, Redes e Información</h4>
                 <div class="form-group">
@@ -611,6 +626,24 @@
             renderCatalog();
         }
 
+        // CONTROL VISUAL EN TIEMPO REAL DE LAS CONDICIONES DE ENTREGA
+        function updateDeliveryDisclaimer() {
+            const method = document.getElementById('order-delivery').value;
+            const disclaimer = document.getElementById('delivery-disclaimer');
+            const addressGroup = document.getElementById('address-group');
+
+            if (method === "Retiro en el local") {
+                addressGroup.style.display = "none";
+                disclaimer.innerHTML = `<strong>📍 Información de Retiro:</strong><br>Podés retirar de lunes a viernes en nuestros horarios habituales comercial. Por favor, coordiná previamente para asegurar que tengamos tu pedido empaquetado y listo.`;
+            } else if (method === "Envío a domicilio con cargo") {
+                addressGroup.style.display = "block";
+                disclaimer.innerHTML = `<strong>🚚 Envío Tradicional (Con Cargo):</strong><br>Los repartos con costo se coordinan y programan según las zonas hábiles de distribución. El valor exacto del cadete se sumará al momento de concretar la entrega por WhatsApp.`;
+            } else if (method === "Envío gratis (Miércoles o Sábado)") {
+                addressGroup.style.display = "block";
+                disclaimer.innerHTML = `<strong>🎉 Recorrido con Envío GRATIS:</strong><br>• <strong>Miércoles y Sábados:</strong> Días oficiales de reparto gratuito.<br>• <strong>Horarios:</strong> El recorrido de distribución se ejecuta exclusivamente dentro de las franjas pactadas de comercio. ¡Asegurá tu cupo de logística con anticipación!`;
+            }
+        }
+
         /* LÓGICA DE FILTROS DINÁMICOS */
         function renderFilters() {
             const mainContainer = document.getElementById('main-filters');
@@ -704,7 +737,6 @@
         function createProduct() {
             const name = document.getElementById('new-p-name').value.trim();
             const brand = document.getElementById('new-p-brand').value.trim();
-            // Si dejas vacío el campo de imagen, por defecto tomará la foto de tu logo
             const img = document.getElementById('new-p-img').value.trim() || 'IMG_20260529_141408_096.webp';
             const cat = document.getElementById('new-p-cat').value;
             const sub = document.getElementById('new-p-sub').value || 'Todos';
@@ -881,84 +913,296 @@
             if(cart[idx].qty <= 0) cart.splice(idx, 1);
             localStorage.setItem('huesito_cart_v4', JSON.stringify(cart));
             updateCartBadge(); renderCart();
-        }
+        }// ==========================================
+// PARTE 11 DE 11: ENVÍOS, ADMINISTRACIÓN Y CIERRE
+// ==========================================
 
-        /* ENVÍO AL WHATSAPP CONFIGURADO */
-        function sendOrder() {
-            const name = document.getElementById('order-name').value.trim();
-            const address = document.getElementById('order-address').value.trim();
-            const payment = document.getElementById('order-payment').value;
+/**
+ * Procesa el pedido, valida datos, descuenta stock y redirige a WhatsApp
+ */
+function sendOrder() {
+    if (cart.length === 0) {
+        alert("El carrito está vacío.");
+        return;
+    }
 
-            if(!name || !address || cart.length === 0) return alert("Complete sus datos de entrega e incorpore artículos al carrito.");
+    const nameInput = document.getElementById('order-name');
+    const paymentInput = document.getElementById('order-payment');
+    const deliveryInput = document.getElementById('order-delivery');
+    const addressContainer = document.getElementById('address-container');
+    const addressInput = document.getElementById('order-address');
 
-            let text = `🐾 *NUEVO PEDIDO - ${storeConfig.title.toUpperCase()}* 🐾\n\n`;
-            text += `👤 *Cliente:* ${name}\n📍 *Dirección:* ${address}\n💳 *Método de Pago:* ${payment}\n\n📦 *Productos:*\n`;
+    const name = nameInput ? nameInput.value.trim() : '';
+    const payment = paymentInput ? paymentInput.value : '';
+    const delivery = deliveryInput ? deliveryInput.value : '';
+    let address = addressInput ? addressInput.value.trim() : '';
 
-            let total = 0;
-            cart.forEach(item => {
-                total += item.price * item.qty;
-                text += `- ${item.name} (${item.variantName}) x${item.qty} : $${(item.price * item.qty).toLocaleString('es-AR')}\n`;
-            });
-            text += `\n💰 *TOTAL DEL PEDIDO: $${total.toLocaleString('es-AR')}*`;
-            
-            cart.forEach(item => {
-                let p = products.find(prod => prod.id === item.id);
-                if(p) {
-                    let v = p.variants.find(vr => vr.name === item.variantName);
-                    if(v) v.stock = Math.max(0, v.stock - item.qty);
+    if (!name) {
+        alert("Por favor, ingresa tu nombre.");
+        if(nameInput) nameInput.focus();
+        return;
+    }
+    if (!payment) {
+        alert("Por favor, selecciona un método de pago.");
+        if(paymentInput) paymentInput.focus();
+        return;
+    }
+    if (!delivery) {
+        alert("Por favor, selecciona un método de entrega.");
+        if(deliveryInput) deliveryInput.focus();
+        return;
+    }
+
+    // Validar dirección si no es retiro en local
+    if (delivery !== "Retiro en el local" && !address) {
+        alert("Por favor, ingresa tu dirección para el envío.");
+        if(addressInput) addressInput.focus();
+        return;
+    }
+
+    let deliveryNote = "";
+    if (delivery === "Retiro en el local") {
+        deliveryNote = "Retiro programado en el local dentro del horario comercial habitual";
+        address = "N/A (Retira en local)";
+    } else if (delivery === "Envío gratis (Miércoles o Sábado)") {
+        deliveryNote = "Solicito envío sin cargo para el próximo recorrido oficial (Miércoles o Sábado) en la franja horaria de reparto pactada";
+    } else if (delivery === "Envío a domicilio con cargo") {
+        deliveryNote = "Envío tradicional solicitado. Cadetería a coordinar por WhatsApp según zona";
+    }
+
+    // Construcción del mensaje de WhatsApp
+    let text = `🐾 *NUEVO PEDIDO - EL HUESITO* 🐾\n\n`;
+    text += `👤 *Cliente:* ${name}\n`;
+    text += `💳 *Pago:* ${payment}\n`;
+    text += `🛵 *Entrega:* ${delivery}\n`;
+    text += `📍 *Dirección:* ${address}\n`;
+    text += `📝 *Nota de entrega:* ${deliveryNote}\n\n`;
+    text += `🛒 *DETALLE DEL PEDIDO:*\n`;
+
+    let total = 0;
+
+    // Recorrer carrito, armar texto y descontar stock simultáneamente
+    cart.forEach(item => {
+        const itemTotal = item.price * item.quantity;
+        total += itemTotal;
+        
+        let variantText = item.variantName ? ` (${item.variantName})` : '';
+        text += `- ${item.quantity}x ${item.name}${variantText} | $${itemTotal.toLocaleString('es-AR')}\n`;
+
+        // Descuento de stock físico local
+        const productIndex = products.findIndex(p => p.id === item.id);
+        if (productIndex !== -1) {
+            if (products[productIndex].hasVariants && item.variantName) {
+                const vIndex = products[productIndex].variants.findIndex(v => v.name === item.variantName);
+                if (vIndex !== -1) {
+                    products[productIndex].variants[vIndex].stock = Math.max(0, products[productIndex].variants[vIndex].stock - item.quantity);
                 }
-            });
-            localStorage.setItem('huesito_products_v4', JSON.stringify(products));
-
-            cart = []; localStorage.removeItem('huesito_cart_v4');
-            updateCartBadge(); toggleModal('cart-modal'); renderCatalog();
-            
-            window.open(`https://wa.me/${storeConfig.phone}?text=${encodeURIComponent(text)}`);
-        }
-
-        /* ELIMINADORES COMPLEMENTARIOS DEL PANEL */
-        function renderAdminProducts() {
-            const container = document.getElementById('admin-products-list'); container.innerHTML = "";
-            products.forEach(p => {
-                container.innerHTML += `<div class="admin-item"><span>${p.name} (${p.brand})</span><button class="btn-del" onclick="deleteProduct(${p.id})"><i class="fa-solid fa-trash"></i></button></div>`;
-            });
-        }
-
-        function deleteProduct(id) {
-            if(confirm("¿Estás seguro de eliminar este artículo del catálogo?")) {
-                products = products.filter(p => p.id !== id);
-                localStorage.setItem('huesito_products_v4', JSON.stringify(products));
-                renderCatalog(); renderAdminProducts();
+            } else {
+                products[productIndex].stock = Math.max(0, products[productIndex].stock - item.quantity);
             }
         }
+    });
 
-        function renderAdminCategories() {
-            const container = document.getElementById('admin-categories-list'); container.innerHTML = "";
-            Object.keys(categories).forEach(cat => {
-                container.innerHTML += `<div class="admin-item" style="background:#CBD5E1;"><strong>${cat}</strong><button class="btn-del" onclick="deleteCategory('${cat}')"><i class="fa-solid fa-trash"></i></button></div>`;
-                categories[cat].forEach(sub => {
-                    container.innerHTML += `<div class="admin-item" style="margin-left:20px; font-size:0.8rem; background:#E2E8F0;"><span>↳ ${sub}</span><button class="btn-del" onclick="deleteSubCategory('${cat}', '${sub}')"><i class="fa-solid fa-xmark"></i></button></div>`;
-                });
+    text += `\n💰 *TOTAL A PAGAR: $${total.toLocaleString('es-AR')}*\n\n`;
+    text += `⚠️ *NOTA IMPORTANTE:* Por cuestiones de higiene y seguridad sanitaria, las camitas y las capas NO tienen cambio ni devolución.`;
+
+    // Persistir la actualización del stock
+    localStorage.setItem('huesito_products_v4', JSON.stringify(products));
+
+    // Vaciar carrito y limpiar interfaz
+    cart = [];
+    localStorage.removeItem('huesito_cart_v4');
+    
+    // Actualizar pantallas de inmediato
+    updateCartUI();
+    renderCatalog();
+    
+    if (typeof closeModal === 'function') {
+        closeModal('cart-modal');
+    } else {
+        const modal = document.getElementById('cart-modal');
+        if (modal) modal.style.display = 'none';
+    }
+
+    // Redirección final a la API de WhatsApp
+    const cleanPhone = storeConfig.phone.replace(/\D/g, '');
+    const url = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(text)}`;
+    window.open(url, '_blank');
+}
+
+/**
+ * Renderiza el listado de productos en el panel de administración
+ */
+function renderAdminProducts() {
+    const container = document.getElementById('admin-products-list');
+    if (!container) return;
+
+    if (products.length === 0) {
+        container.innerHTML = `<p class="text-muted text-center py-3">No hay productos cargados.</p>`;
+        return;
+    }
+
+    let html = '<div class="table-responsive"><table class="table align-middle"><tbody>';
+    products.forEach(p => {
+        let stockDisplay = p.hasVariants 
+            ? p.variants.map(v => `${v.name}: ${v.stock}`).join(' | ') 
+            : `Stock: ${p.stock}`;
+
+        html += `
+            <tr>
+                <td>
+                    <strong class="d-block text-dark">${p.name}</strong>
+                    <small class="text-muted">${p.category} ${p.subcategory ? ' > ' + p.subcategory : ''}</small>
+                    <br><small class="text-primary">${stockDisplay}</small>
+                </td>
+                <td class="text-end" style="width: 80px;">
+                    <button class="btn btn-sm btn-outline-danger" onclick="deleteProduct('${p.id}')" title="Eliminar Producto">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        `;
+    });
+    html += '</tbody></table></div>';
+    container.innerHTML = html;
+}
+
+/**
+ * Elimina un producto del ecosistema por su ID
+ */
+function deleteProduct(id) {
+    if (!confirm("¿Estás seguro de que deseas eliminar este producto definitivamente?")) return;
+
+    products = products.filter(p => p.id !== id);
+    localStorage.setItem('huesito_products_v4', JSON.stringify(products));
+    
+    // Refrescar vistas del admin y del catálogo general
+    renderAdminProducts();
+    renderCatalog();
+    if (typeof populateCategoryFilters === 'function') populateCategoryFilters();
+}
+
+/**
+ * Renderiza el gestor de categorías y subcategorías en el panel de administración
+ */
+function renderAdminCategories() {
+    const container = document.getElementById('admin-categories-list');
+    if (!container) return;
+
+    const catKeys = Object.keys(categories);
+    if (catKeys.length === 0) {
+        container.innerHTML = `<p class="text-muted text-center py-3">No hay categorías configuradas.</p>`;
+        return;
+    }
+
+    let html = '<ul class="list-group list-group-flush">';
+    catKeys.forEach(cat => {
+        html += `
+            <li class="list-group-item bg-light d-flex justify-content-between align-items-center fw-bold text-secondary">
+                <span><i class="bi bi-folder2-open me-2"></i>${cat}</span>
+                <button class="btn btn-xs btn-link text-danger p-0" onclick="deleteCategory('${cat}')" title="Eliminar Categoría">
+                    <i class="bi bi-x-circle-fill"></i>
+                </button>
+            </li>
+        `;
+        
+        if (categories[cat] && categories[cat].length > 0) {
+            categories[cat].forEach(sub => {
+                html += `
+                    <li class="list-group-item d-flex justify-content-between align-items-center ps-4 py-1 small text-muted">
+                        <span><i class="bi bi-arrow-return-right me-2"></i>${sub}</span>
+                        <button class="btn btn-xs btn-link text-danger p-0" onclick="deleteSubCategory('${cat}', '${sub}')" title="Eliminar Subcategoría">
+                            <i class="bi bi-trash3 opacity-75"></i>
+                        </button>
+                    </li>
+                `;
             });
         }
+    });
+    html += '</ul>';
+    container.innerHTML = html;
+}
 
-        function deleteCategory(cat) {
-            if(confirm(`¿Deseas eliminar la categoría entera "${cat}"?`)) {
-                delete categories[cat]; localStorage.setItem('huesito_categories_v4', JSON.stringify(categories));
-                currentMainFilter = 'Todos'; currentSubFilter = 'Todos';
-                renderFilters(); renderAdminSelects(); renderAdminCategories(); renderCatalog();
+/**
+ * Elimina una categoría principal y reajusta los filtros
+ */
+function deleteCategory(cat) {
+    if (!confirm(`¿Eliminar la categoría "${cat}"? Esto no borrará los productos pero quedarán sin categoría asignada.`)) return;
+
+    delete categories[cat];
+    localStorage.setItem('huesito_categories_v4', JSON.stringify(categories));
+    
+    // Resetear filtros activos globales para evitar errores de renderizado
+    currentCategory = 'Todos';
+    currentSubcategory = '';
+    
+    renderAdminCategories();
+    if (typeof populateCategoryFilters === 'function') populateCategoryFilters();
+    renderCatalog();
+}
+
+/**
+ * Elimina una subcategoría de una categoría específica
+ */
+function deleteSubCategory(cat, sub) {
+    if (!confirm(`¿Eliminar la subcategoría "${sub}" de "${cat}"?`)) return;
+
+    if (categories[cat]) {
+        categories[cat] = categories[cat].filter(s => s !== sub);
+        localStorage.setItem('huesito_categories_v4', JSON.stringify(categories));
+        
+        currentCategory = 'Todos';
+        currentSubcategory = '';
+        
+        renderAdminCategories();
+        if (typeof populateCategoryFilters === 'function') populateCategoryFilters();
+        renderCatalog();
+    }
+}
+
+/**
+ * Inicialización completa de la aplicación una vez cargado el DOM
+ */
+function initApp() {
+    // Escuchar el selector de entregas para alternar dinámicamente el campo de dirección
+    const deliveryInput = document.getElementById('order-delivery');
+    if (deliveryInput) {
+        deliveryInput.addEventListener('change', function() {
+            const addressContainer = document.getElementById('address-container');
+            if (addressContainer) {
+                if (this.value && this.value !== "Retiro en el local") {
+                    addressContainer.style.display = 'block';
+                    const addressIn = document.getElementById('order-address');
+                    if(addressIn) addressIn.required = true;
+                } else {
+                    addressContainer.style.display = 'none';
+                    const addressIn = document.getElementById('order-address');
+                    if(addressIn) {
+                        addressIn.required = false;
+                        addressIn.value = '';
+                    }
+                }
             }
-        }
+        });
+    }
 
-        function deleteSubCategory(cat, sub) {
-            if(confirm(`¿Deseas remover la subcategoría "${sub}" de ${cat}?`)) {
-                categories[cat] = categories[cat].filter(s => s !== sub);
-                localStorage.setItem('huesito_categories_v4', JSON.stringify(categories));
-                currentSubFilter = 'Todos'; renderFilters(); renderAdminCategories(); renderCatalog();
-            }
-        }
+    // Cargar layouts visuales iniciales
+    if (typeof initSwiper === 'function') initSwiper();
+    renderCatalog();
+    if (typeof populateCategoryFilters === 'function') populateCategoryFilters();
+    updateCartUI();
+    
+    // Inicializar paneles de control administrativo en segundo plano
+    renderAdminProducts();
+    renderAdminCategories();
+}
 
-        window.onload = initApp;
-    </script>
+// Vinculación definitiva del ciclo de vida al arranque del navegador
+window.onload = initApp;
+</script>
 </body>
 </html>
+    
+                    
+                    
+                            
