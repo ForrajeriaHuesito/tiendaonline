@@ -3,14 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Forrajería Huesito</title>
+    <title>Panel de Control Total - Mi Tienda</title>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #FF9F1C; --primary-hover: #E88F13; --secondary: #2EC4B6; --dark: #011627;
-            --light: #FBFBFF; --white: #FFFFFF; --gray: #F0F2F5; --gray-text: #62727D;
-            --danger: #E71D36; --success: #4CAF50; --radius: 20px;
+            /* Colores base que el JavaScript modificará en tiempo real */
+            --primary: #FF9F1C; 
+            --secondary: #2EC4B6; 
+            --dark: #011627;
+            --light: #FBFBFF; 
+            --white: #FFFFFF; 
+            --gray: #F0F2F5; 
+            --gray-text: #62727D;
+            --danger: #E71D36; 
+            --success: #4CAF50; 
+            --radius: 20px;
             --shadow: 0 8px 24px rgba(1, 22, 39, 0.06);
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
@@ -18,7 +26,7 @@
         h1, h2, h3, h4, .brand-title { font-family: 'Fredoka', sans-serif; }
         .container { max-width: 1200px; margin: 0 auto; padding: 0 15px; width: 100%; }
         
-        /* HEADER RESPONSIVO ESTILO TIENDA NUBE */
+        /* CABECERA DINÁMICA */
         .main-header { background: var(--white); box-shadow: 0 2px 10px rgba(0,0,0,0.03); position: sticky; top: 0; z-index: 100; padding: 12px 0; }
         .header-grid { display: flex; align-items: center; justify-content: space-between; gap: 15px; }
         .brand { display: flex; align-items: center; gap: 10px; }
@@ -26,7 +34,7 @@
         .brand-title { color: var(--primary); font-size: 1.3rem; line-height: 1.1; }
         .brand-sub { font-size: 0.7rem; color: var(--gray-text); text-transform: uppercase; font-weight: 700; }
         
-        /* BUSCADOR PROFESIONAL */
+        /* BUSCADOR */
         .search-container { flex: 1; max-width: 500px; position: relative; }
         .search-input { width: 100%; padding: 10px 15px 10px 40px; border: 2px solid var(--gray); border-radius: var(--radius); background: var(--gray); outline: none; font-size: 0.9rem; transition: all 0.2s; }
         .search-input:focus { border-color: var(--primary); background: var(--white); }
@@ -62,7 +70,7 @@
         .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; }
         @media (min-width: 480px) { .products-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; } }
         
-        .product-card { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; display: flex; flex-direction: column; border: 1px solid rgba(0,0,0,0.01); position: relative; }/* CARTELERA DE STOCK INTELIGENTE (¡ÚLTIMOS!) */
+        .product-card { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; display: flex; flex-direction: column; border: 1px solid rgba(0,0,0,0.01); position: relative; }/* CARTELERA DE STOCK INTELIGENTE */
         .stock-badge { position: absolute; top: 10px; left: 10px; background: var(--danger); color: var(--white); padding: 5px 10px; border-radius: 12px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; z-index: 10; box-shadow: 0 4px 10px rgba(231,29,54,0.25); animation: pulse 1.8s infinite; }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.03); } 100% { transform: scale(1); } }
 
@@ -92,13 +100,13 @@
         .footer-social { display: flex; gap: 12px; margin-top: 12px; }
         .social-link { width: 40px; height: 40px; background: rgba(255,255,255,0.05); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--white); font-size: 1.2rem; text-decoration: none; transition: all 0.2s; }
         .social-link:hover { background: var(--primary); transform: translateY(-3px); }
-        .footer-bottom { text-align: center; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 20px; font-size: 0.8rem; margin-top: 20px; }/* COMPONENTES DE ADMINISTRACIÓN Y MODALES */
+        .footer-bottom { text-align: center; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 20px; font-size: 0.8rem; margin-top: 20px; }/* COMPONENTES DE GESTIÓN Y VENTANAS MODALES */
         .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(1,22,39,0.4); backdrop-filter: blur(4px); z-index: 200; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; padding: 15px; transition: opacity 0.2s; }
         .modal.active { opacity: 1; pointer-events: auto; }
-        .modal-content { background: var(--white); padding: 25px; border-radius: var(--radius); width: 100%; max-width: 500px; max-height: 85vh; overflow-y: auto; position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        .modal-content { background: var(--white); padding: 25px; border-radius: var(--radius); width: 100%; max-width: 550px; max-height: 85vh; overflow-y: auto; position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
         .modal-close { position: absolute; top: 15px; right: 15px; font-size: 1.2rem; color: var(--gray-text); cursor: pointer; background: none; border: none; }
         
-        /* INTERRUPTOR DESLIZANTE PARA VISIBILIDAD DE STOCK */
+        /* INTERRUPTOR DESLIZANTE DE STOCK */
         .toggle-container { display: flex; align-items: center; justify-content: space-between; background: var(--gray); padding: 12px; border-radius: 12px; margin-bottom: 15px; }
         .toggle-label { font-size: 0.85rem; font-weight: 600; color: var(--dark); }
         .switch { position: relative; display: inline-block; width: 46px; height: 24px; }
@@ -110,11 +118,13 @@
 
         .form-group { margin-bottom: 12px; }
         .form-group label { display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 5px; color: var(--gray-text); }
-        .form-control { width: 100%; padding: 10px; border: 2px solid var(--gray); border-radius: 10px; font-size: 0.9rem; outline: none; }
+        .form-control { width: 100%; padding: 10px; border: 2px solid var(--gray); border-radius: 10px; font-size: 0.9rem; outline: none; background: var(--white); color: var(--dark); }
         .form-control:focus { border-color: var(--primary); }
         .btn-submit { width: 100%; padding: 12px; background: var(--success); color: var(--white); font-weight: 600; border-radius: 12px; border: none; margin-top: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.95rem; }
-        .admin-section { border-top: 1px solid var(--gray); padding-top: 15px; margin-top: 15px; }
-        .admin-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: var(--light); border-radius: 8px; margin-bottom: 6px; font-size: 0.85rem; font-weight: 500; }
+        
+        .admin-section { border-top: 2px dashed var(--gray); padding-top: 15px; margin-top: 20px; }
+        .admin-section h4 { color: var(--dark); font-size: 1.05rem; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+        .admin-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: var(--gray); border-radius: 8px; margin-bottom: 6px; font-size: 0.85rem; font-weight: 500; }
         .btn-del { color: var(--danger); border: none; background: none; cursor: pointer; font-size: 0.95rem; }
         .variant-row { display: flex; gap: 6px; margin-bottom: 6px; }
     </style>
@@ -123,10 +133,10 @@
     <header class="main-header">
         <div class="container header-grid">
             <div class="brand">
-                <img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=100" alt="Logo" class="brand-logo" id="header-logo">
+                <img src="" alt="Logo" class="brand-logo" id="main-logo-img">
                 <div>
-                    <h1 class="brand-title">Forrajería Huesito</h1>
-                    <div class="brand-sub">Tienda de Mascotas</div>
+                    <h1 class="brand-title" id="dyn-store-title">Cargando...</h1>
+                    <div class="brand-sub" id="dyn-store-subtitle">Cargando...</div>
                 </div>
             </div>
             
@@ -148,15 +158,16 @@
     </header>
 
     <div class="container">
-        <div class="banner">
+        <div class="banner" id="main-banner-layout">
             <div class="banner-text">
-                <h2>Todo para tu mejor amigo</h2>
-                <p>Alimentos balanceados, sueltos y accesorios con envíos a domicilio.</p>
+                <h2 id="dyn-banner-title">Cargando...</h2>
+                <p id="dyn-banner-desc">Cargando...</p>
             </div>
-            <i class="fa-solid fa-bone banner-img"></i>
-        </div><div class="shop-layout">
+            <i class="fa-solid fa-star banner-img" id="dyn-banner-icon"></i>
+        </div>/* DISTRIBUCIÓN GENERAL DE LA TIENDA */
+        <div class="shop-layout">
             <aside class="sidebar">
-                <h3>Categorías</h3>
+                <h3 id="dyn-filter-title">Categorías</h3>
                 <div class="filter-group" id="main-filters">
                     </div>
                 <div class="filter-group" id="sub-filters">
@@ -170,33 +181,33 @@
         </div>
 
         <section class="about">
-            <h2>Sobre Nosotros</h2>
-            <p>En Forrajería Huesito nos apasiona el bienestar de tus mascotas. Ofrecemos alimentos premium por bolsa cerrada o fraccionados por kilo, además de una amplia variedad de accesorios, camitas, ropita e higiene para consentir a los integrantes más mimados del hogar.</p>
+            <h2 id="dyn-about-title">Sobre Nosotros</h2>
+            <p id="dyn-about-text">Cargando información corporativa...</p>
         </section>
     </div>
 
-    <footer class="footer">
+    <footer class="footer" id="main-footer-layout">
         <div class="container">
             <div class="footer-grid">
                 <div>
-                    <h3>Forrajería Huesito</h3>
-                    <p>Calidad y confianza para tu compañero fiel.</p>
+                    <h3 id="dyn-foot-name">Mi Tienda</h3>
+                    <p id="dyn-foot-slogan">Calidad y confianza garantizada.</p>
                 </div>
                 <div>
                     <h3>Contacto</h3>
-                    <p><i class="fa-brands fa-whatsapp"></i> +54 9 343 508-8057</p>
-                    <p><i class="fa-solid fa-location-dot"></i> Paraná, Entre Ríos</p>
+                    <p id="dyn-foot-phone"><i class="fa-brands fa-whatsapp"></i> Cargando...</p>
+                    <p id="dyn-foot-address"><i class="fa-solid fa-location-dot"></i> Cargando...</p>
                 </div>
                 <div>
                     <h3>Síguenos</h3>
                     <div class="footer-social">
-                        <a href="https://instagram.com" target="_blank" class="social-link"><i class="fa-brands fa-instagram"></i></a>
-                        <a href="https://facebook.com" target="_blank" class="social-link"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" id="dyn-link-instagram" target="_blank" class="social-link"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" id="dyn-link-facebook" target="_blank" class="social-link"><i class="fa-brands fa-facebook-f"></i></a>
                     </div>
                 </div>
             </div>
             <div class="footer-bottom">
-                &copy; 2026 Forrajería Huesito - Todos los derechos reservados.
+                &copy; 2026 <span id="dyn-foot-copyright">Mi Tienda</span> - Todos los derechos reservados.
             </div>
         </div>
     </footer>
@@ -206,15 +217,14 @@
             <button class="modal-close" onclick="toggleModal('cart-modal')">&times;</button>
             <h2><i class="fa-solid fa-basket-shopping"></i> Tu Carrito</h2>
             <div id="cart-items-container"></div>
-            <div id="cart-alert-container"></div>
             
             <div class="form-group" style="margin-top: 15px;">
                 <label>Nombre y Apellido</label>
-                <input type="text" id="order-name" class="form-control" placeholder="Ej: Juan Pérez">
+                <input type="text" id="order-name" class="form-control" placeholder="Ej: María Luz">
             </div>
             <div class="form-group">
                 <label>Dirección de Entrega</label>
-                <input type="text" id="order-address" class="form-control" placeholder="Ej: Av. Almafuerte 123">
+                <input type="text" id="order-address" class="form-control" placeholder="Ej: Urquiza 450">
             </div>
             <div class="form-group">
                 <label>Método de Pago</label>
@@ -230,10 +240,10 @@
     </div><div class="modal" id="admin-modal">
         <div class="modal-content">
             <button class="modal-close" onclick="toggleModal('admin-modal')">&times;</button>
-            <h2><i class="fa-solid fa-gear"></i> Panel de Control</h2>
+            <h2><i class="fa-solid fa-gear"></i> Panel de Control Total</h2>
             
-            <div class="toggle-container">
-                <span class="toggle-label"><i class="fa-solid fa-eye"></i> Mostrar número de stock a clientes</span>
+            <div class="toggle-container" style="margin-top: 15px;">
+                <span class="toggle-label"><i class="fa-solid fa-eye"></i> Mostrar unidades exactas de stock</span>
                 <label class="switch">
                     <input type="checkbox" id="show-stock-number" onchange="toggleStockVisibility()">
                     <span class="slider"></span>
@@ -241,6 +251,75 @@
             </div>
 
             <div class="admin-section">
+                <h4><i class="fa-solid fa-palette"></i> Identidad y Colores Visuales</h4>
+                <div class="form-group">
+                    <label>Nombre de la Tienda</label>
+                    <input type="text" id="cfg-store-title" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Subtítulo / Rubro</label>
+                    <input type="text" id="cfg-store-subtitle" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>URL del Logo (Foto redonda)</label>
+                    <input type="text" id="cfg-store-logo" class="form-control">
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <div class="form-group" style="flex: 1;">
+                        <label>Color Principal</label>
+                        <input type="color" id="cfg-color-primary" class="form-control" style="height: 40px; padding: 2px;">
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label>Color Secundario</label>
+                        <input type="color" id="cfg-color-secondary" class="form-control" style="height: 40px; padding: 2px;">
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label>Fondo Oscuro Footer</label>
+                        <input type="color" id="cfg-color-dark" class="form-control" style="height: 40px; padding: 2px;">
+                    </div>
+                </div>
+            </div>
+
+            <div class="admin-section">
+                <h4><i class="fa-solid fa-image"></i> Personalizar Banner Promocional</h4>
+                <div class="form-group">
+                    <label>Título del Banner</label>
+                    <input type="text" id="cfg-banner-title" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Descripción del Banner</label>
+                    <input type="text" id="cfg-banner-desc" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Ícono de FontAwesome (Ej: fa-bone, fa-star, fa-tag)</label>
+                    <input type="text" id="cfg-banner-icon" class="form-control" placeholder="fa-bone">
+                </div>
+            </div>
+
+            <div class="admin-section">
+                <h4><i class="fa-solid fa-address-book"></i> Contacto, Redes e Información</h4>
+                <div class="form-group">
+                    <label>Número de WhatsApp (Con código de país, ej: 5493435088057)</label>
+                    <input type="text" id="cfg-contact-phone" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Dirección Física</label>
+                    <input type="text" id="cfg-contact-address" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Enlace de Instagram (URL completa)</label>
+                    <input type="text" id="cfg-link-instagram" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Enlace de Facebook (URL completa)</label>
+                    <input type="text" id="cfg-link-facebook" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Texto Sección "Sobre Nosotros"</label>
+                    <textarea id="cfg-about-text" class="form-control" rows="3" style="resize: vertical; font-family: inherit;"></textarea>
+                </div>
+                <button class="btn-submit" onclick="saveVisualConfiguration()" style="background: var(--primary); margin-top: 5px;"><i class="fa-solid fa-circle-check"></i> Aplicar Cambios Visuales y Textos</button>
+            </div><div class="admin-section">
                 <h4><i class="fa-solid fa-tags"></i> Crear Categorías y Opciones</h4>
                 <div class="form-group" style="margin-top:8px;">
                     <label>Categoría Principal (Ej: Perro, Gato, Accesorios)</label>
@@ -249,11 +328,11 @@
                 <button class="btn-submit" style="background:var(--secondary); margin-bottom:15px;" onclick="addCategory()"><i class="fa-solid fa-plus"></i> Añadir Categoría</button>
                 
                 <div class="form-group">
-                    <label>Asignar Subcategoría (Ej: Adulto, Cachorro, Ropita, Camitas)</label>
+                    <label>Asignar Subcategoría / Opción a:</label>
                     <select id="select-parent-cat" class="form-control"></select>
                 </div>
                 <div class="form-group">
-                    <input type="text" id="new-subcat-name" class="form-control" placeholder="Nombre de la opción/subcategoría">
+                    <input type="text" id="new-subcat-name" class="form-control" placeholder="Nombre de la opción (Ej: Cachorro, Camitas)">
                 </div>
                 <button class="btn-submit" style="background:var(--secondary);" onclick="addSubCategory()"><i class="fa-solid fa-plus"></i> Añadir Opción</button>
             </div>
@@ -269,8 +348,8 @@
                     <input type="text" id="new-p-brand" class="form-control" placeholder="Ej: Nutrique">
                 </div>
                 <div class="form-group">
-                    <label>Imagen (URL)</label>
-                    <input type="text" id="new-p-img" class="form-control" placeholder="URL de la imagen">
+                    <label>Imagen (Enlace / URL de la foto)</label>
+                    <input type="text" id="new-p-img" class="form-control" placeholder="URL de la imagen del producto">
                 </div>
                 <div class="form-group">
                     <label>Categoría</label>
@@ -282,12 +361,12 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Variantes (Cantidad/Talle, Precio y Stock)</label>
+                    <label>Variantes (Especifica Cantidad/Talle, Precio y Stock)</label>
                     <div id="variants-builder-container"></div>
-                    <button type="button" class="btn-submit" style="background:var(--dark); font-size:0.8rem; padding:6px;" onclick="addVariantRowBuilder()"><i class="fa-solid fa-plus"></i> Añadir Variante</button>
+                    <button type="button" class="btn-submit" style="background:var(--dark); font-size:0.8rem; padding:6px;" onclick="addVariantRowBuilder()"><i class="fa-solid fa-plus"></i> Añadir Otra Variante</button>
                 </div>
                 
-                <button class="btn-submit" onclick="createProduct()"><i class="fa-solid fa-floppy-disk"></i> Guardar Producto</button>
+                <button class="btn-submit" onclick="createProduct()"><i class="fa-solid fa-floppy-disk"></i> Guardar Producto en Catálogo</button>
             </div>
 
             <div class="admin-section">
@@ -309,44 +388,144 @@
         let currentSubFilter = 'Todos';
         let showStockNumber = true;
 
+        // Estructura de textos, redes y colores editables
+        let storeConfig = {};
+
         function initApp() {
-            // Carga o inicializa categorías editables
-            const savedCats = localStorage.getItem('huesito_categories_v2');
+            // 1. CARGAR O INICIALIZAR CONFIGURACIÓN VISUAL GENERAL
+            const savedConfig = localStorage.getItem('huesito_store_config_v3');
+            if(savedConfig) {
+                storeConfig = JSON.parse(savedConfig);
+            } else {
+                storeConfig = {
+                    title: "Forrajería Huesito",
+                    subtitle: "Tienda de Mascotas",
+                    logo: "https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=100",
+                    colorPrimary: "#FF9F1C",
+                    colorSecondary: "#2EC4B6",
+                    colorDark: "#011627",
+                    bannerTitle: "Todo para tu mejor amigo",
+                    bannerDesc: "Alimentos balanceados, sueltos y accesorios con envíos a domicilio.",
+                    bannerIcon: "fa-bone",
+                    phone: "5493435088057",
+                    address: "Paraná, Entre Ríos",
+                    instagram: "https://instagram.com",
+                    facebook: "https://facebook.com",
+                    aboutText: "En Forrajería Huesito nos apasiona el bienestar de tus mascotas. Ofrecemos alimentos premium por bolsa cerrada o fraccionados por kilo, además de una amplia variedad de accesorios, camitas, ropita e higiene para consentir a los integrantes más mimados del hogar."
+                };
+                localStorage.setItem('huesito_store_config_v3', JSON.stringify(storeConfig));
+            }
+
+            // Aplicar la configuración guardada a la interfaz pública
+            applyVisualConfiguration();
+
+            // 2. CARGAR O INICIALIZAR CATEGORÍAS EDITABLES
+            const savedCats = localStorage.getItem('huesito_categories_v3');
             if(savedCats) {
                 categories = JSON.parse(savedCats);
             } else {
                 categories = {
                     "Perro": ["Adulto", "Cachorro"],
                     "Gato": ["Adulto", "Cachorro"],
-                    "Aves": ["Ponedora", "Iniciador"],
-                    "Higiene": ["Piedras", "Limpieza"],
+                    "Aves": ["Ponedora"],
                     "Accesorios": ["Camitas", "Ropita"]
                 };
-                localStorage.setItem('huesito_categories_v2', JSON.stringify(categories));
+                localStorage.setItem('huesito_categories_v3', JSON.stringify(categories));
             }
 
-            // Carga o inicializa productos con estructura de stock
-            const savedProds = localStorage.getItem('huesito_products_v2');
+            // 3. CARGAR O INICIALIZAR PRODUCTOS
+            const savedProds = localStorage.getItem('huesito_products_v3');
             if(savedProds) {
                 products = JSON.parse(savedProds);
             } else {
                 products = [
-                    { id: 1, name: "Alimento Premium Perros", brand: "Nutrique", img: "https://images.unsplash.com/photo-1589924691995-400dc9ebd109?w=300", cat: "Perro", sub: "Adulto", variants: [{name: "15 Kg", price: 28000, stock: 2}, {name: "3 Kg", price: 8500, stock: 10}] },
-                    { id: 2, name: "Ropita de Abrigo Mascotas", brand: "Huesito Brand", img: "https://images.unsplash.com/photo-1541599540903-216a46cc1df6?w=300", cat: "Accesorios", sub: "Ropita", variants: [{name: "Talle L", price: 7500, stock: 1}, {name: "Talle M", price: 6000, stock: 4}] }
+                    { id: 1, name: "Alimento Premium Perros", brand: "Nutrique", img: "https://images.unsplash.com/photo-1589924691995-400dc9ebd109?w=300", cat: "Perro", sub: "Adulto", variants: [{name: "15 Kg", price: 28000, stock: 2}, {name: "3 Kg", price: 8500, stock: 10}] }
                 ];
-                localStorage.setItem('huesito_products_v2', JSON.stringify(products));
+                localStorage.setItem('huesito_products_v3', JSON.stringify(products));
             }
 
-            const savedStockVisibility = localStorage.getItem('huesito_stock_visible');
+            const savedStockVisibility = localStorage.getItem('huesito_stock_visible_v3');
             showStockNumber = savedStockVisibility !== null ? JSON.parse(savedStockVisibility) : true;
             document.getElementById('show-stock-number').checked = showStockNumber;
 
-            const savedCart = localStorage.getItem('huesito_cart');
+            const savedCart = localStorage.getItem('huesito_cart_v3');
             if(savedCart) { cart = JSON.parse(savedCart); updateCartBadge(); }
 
             addVariantRowBuilder();
             renderFilters();
             renderCatalog();
+        }
+
+        // APLICA LOS COLORES Y TEXTOS DINÁMICOS AL SITIO WEB
+        function applyVisualConfiguration() {
+            // Actualizar variables de CSS para cambiar la app de color instantáneamente
+            const root = document.documentElement;
+            root.style.setProperty('--primary', storeConfig.colorPrimary);
+            root.style.setProperty('--secondary', storeConfig.colorSecondary);
+            root.style.setProperty('--dark', storeConfig.colorDark);
+
+            // Inyectar textos e imágenes dinámicas en el HTML público
+            document.getElementById('main-logo-img').src = storeConfig.logo;
+            document.getElementById('dyn-store-title').innerText = storeConfig.title;
+            document.getElementById('dyn-store-subtitle').innerText = storeConfig.subtitle;
+            
+            document.getElementById('dyn-banner-title').innerText = storeConfig.bannerTitle;
+            document.getElementById('dyn-banner-desc').innerText = storeConfig.bannerDesc;
+            
+            // Reemplazar ícono del banner limpiando clases anteriores
+            const iconElement = document.getElementById('dyn-banner-icon');
+            iconElement.className = `fa-solid ${storeConfig.bannerIcon} banner-img`;
+
+            document.getElementById('dyn-about-text').innerText = storeConfig.aboutText;
+            document.getElementById('dyn-foot-name').innerText = storeConfig.title;
+            document.getElementById('dyn-foot-slogan').innerText = storeConfig.subtitle;
+            document.getElementById('dyn-foot-phone').innerHTML = `<i class="fa-brands fa-whatsapp"></i> +${storeConfig.phone}`;
+            document.getElementById('dyn-foot-address').innerHTML = `<i class="fa-solid fa-location-dot"></i> ${storeConfig.address}`;
+            document.getElementById('dyn-foot-copyright').innerText = storeConfig.title;
+            
+            document.getElementById('dyn-link-instagram').href = storeConfig.instagram;
+            document.getElementById('dyn-link-facebook').href = storeConfig.facebook;
+        }
+
+        // LLENA LOS INPUTS DEL PANEL CON LOS VALORES ACTUALES AL ABRIRLO
+        function loadConfigIntoAdminPanel() {
+            document.getElementById('cfg-store-title').value = storeConfig.title;
+            document.getElementById('cfg-store-subtitle').value = storeConfig.subtitle;
+            document.getElementById('cfg-store-logo').value = storeConfig.logo;
+            document.getElementById('cfg-color-primary').value = storeConfig.colorPrimary;
+            document.getElementById('cfg-color-secondary').value = storeConfig.colorSecondary;
+            document.getElementById('cfg-color-dark').value = storeConfig.colorDark;
+            document.getElementById('cfg-banner-title').value = storeConfig.bannerTitle;
+            document.getElementById('cfg-banner-desc').value = storeConfig.bannerDesc;
+            document.getElementById('cfg-banner-icon').value = storeConfig.bannerIcon;
+            document.getElementById('cfg-contact-phone').value = storeConfig.phone;
+            document.getElementById('cfg-contact-address').value = storeConfig.address;
+            document.getElementById('cfg-link-instagram').value = storeConfig.instagram;
+            document.getElementById('cfg-link-facebook').value = storeConfig.facebook;
+            document.getElementById('cfg-about-text').value = storeConfig.aboutText;
+        }
+
+        // GUARDA LAS MODIFICACIONES DE TEXTOS/COLORES REALIZADAS EN EL PANEL
+        function saveVisualConfiguration() {
+            storeConfig.title = document.getElementById('cfg-store-title').value.trim();
+            storeConfig.subtitle = document.getElementById('cfg-store-subtitle').value.trim();
+            storeConfig.logo = document.getElementById('cfg-store-logo').value.trim();
+            storeConfig.colorPrimary = document.getElementById('cfg-color-primary').value;
+            storeConfig.colorSecondary = document.getElementById('cfg-color-secondary').value;
+            storeConfig.colorDark = document.getElementById('cfg-color-dark').value;
+            storeConfig.bannerTitle = document.getElementById('cfg-banner-title').value.trim();
+            storeConfig.bannerDesc = document.getElementById('cfg-banner-desc').value.trim();
+            storeConfig.bannerIcon = document.getElementById('cfg-banner-icon').value.trim();
+            storeConfig.phone = document.getElementById('cfg-contact-phone').value.trim();
+            storeConfig.address = document.getElementById('cfg-contact-address').value.trim();
+            storeConfig.instagram = document.getElementById('cfg-link-instagram').value.trim();
+            storeConfig.facebook = document.getElementById('cfg-link-facebook').value.trim();
+            storeConfig.aboutText = document.getElementById('cfg-about-text').value.trim();
+
+            localStorage.setItem('huesito_store_config_v3', JSON.stringify(storeConfig));
+            applyVisualConfiguration();
+            renderCatalog();
+            alert("¡Textos, enlaces y diseño actualizados con éxito!");
         }
 
         function toggleModal(id) {
@@ -355,6 +534,7 @@
 
         function openAdminModal() {
             if(prompt("Ingrese la clave de administrador:") === ADMIN_PASS) {
+                loadConfigIntoAdminPanel();
                 renderAdminSelects();
                 renderAdminProducts();
                 renderAdminCategories();
@@ -362,15 +542,13 @@
             } else {
                 alert("Clave incorrecta.");
             }
-        }
-
-        function toggleStockVisibility() {
+        }function toggleStockVisibility() {
             showStockNumber = document.getElementById('show-stock-number').checked;
-            localStorage.setItem('huesito_stock_visible', showStockNumber);
+            localStorage.setItem('huesito_stock_visible_v3', showStockNumber);
             renderCatalog();
         }
 
-        /* LÓGICA DE FILTROS EDITABLES */
+        /* LÓGICA DE FILTROS DINÁMICOS */
         function renderFilters() {
             const mainContainer = document.getElementById('main-filters');
             mainContainer.innerHTML = `<button class="chip ${currentMainFilter === 'Todos' ? 'active' : ''}" onclick="selectMainFilter('Todos')">Todos</button>`;
@@ -402,24 +580,24 @@
             renderCatalog();
         }
 
-        /* GESTIÓN DE CONFIGURACIONES */
+        /* CONFIGURACIÓN DE FILTROS EDITABLES */
         function addCategory() {
             const name = document.getElementById('new-cat-name').value.trim();
             if(!name || categories[name]) return alert("Categoría inválida o ya existente.");
             categories[name] = [];
-            localStorage.setItem('huesito_categories_v2', JSON.stringify(categories));
+            localStorage.setItem('huesito_categories_v3', JSON.stringify(categories));
             document.getElementById('new-cat-name').value = "";
             renderAdminSelects(); renderFilters(); renderAdminCategories();
-            alert("Categoría añadida.");
+            alert("Categoría añadida con éxito.");
         }
 
         function addSubCategory() {
             const parent = document.getElementById('select-parent-cat').value;
             const subName = document.getElementById('new-subcat-name').value.trim();
-            if(!parent || !subName) return alert("Complete los datos.");
-            if(categories[parent].includes(subName)) return alert("Esa opción ya existe.");
+            if(!parent || !subName) return alert("Complete todos los campos.");
+            if(categories[parent].includes(subName)) return alert("Esa opción ya existe en esta categoría.");
             categories[parent].push(subName);
-            localStorage.setItem('huesito_categories_v2', JSON.stringify(categories));
+            localStorage.setItem('huesito_categories_v3', JSON.stringify(categories));
             document.getElementById('new-subcat-name').value = "";
             renderFilters(); renderAdminCategories();
             alert("Opción añadida exitosamente.");
@@ -478,17 +656,17 @@
                 }
             });
 
-            if(!name || !brand || variants.length === 0) return alert("Complete los campos obligatorios.");
+            if(!name || !brand || variants.length === 0) return alert("Complete los campos requeridos y al menos una variante.");
 
             products.push({ id: Date.now(), name, brand, img, cat, sub, variants });
-            localStorage.setItem('huesito_products_v2', JSON.stringify(products));
+            localStorage.setItem('huesito_products_v3', JSON.stringify(products));
             
             document.getElementById('new-p-name').value = ""; document.getElementById('new-p-brand').value = ""; document.getElementById('new-p-img').value = "";
             document.getElementById('variants-builder-container').innerHTML = ""; addVariantRowBuilder();
-            renderCatalog(); renderAdminProducts(); alert("Producto guardado.");
+            renderCatalog(); renderAdminProducts(); alert("Producto añadido al catálogo.");
         }
 
-        /* RENDERING CON MONITOREO DE STOCK */
+        /* RENDERING DE PRODUCTOS PÚBLICOS */
         function renderCatalog() {
             const container = document.getElementById('products-container');
             container.innerHTML = "";
@@ -502,7 +680,7 @@
             });
 
             if(filtered.length === 0) {
-                container.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:30px; color:var(--gray-text);">No encontramos productos que coincidan.</div>`;
+                container.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:30px; color:var(--gray-text);">No se encontraron productos que coincidan.</div>`;
                 return;
             }
 
@@ -516,19 +694,15 @@
                 });
 
                 const initialVar = p.variants[0];
-                let badgeHTML = "";
-                let stockTextHTML = "";
-                let btnDisabled = "";
+                let badgeHTML = ""; let stockTextHTML = ""; let btnDisabled = "";
 
-                if(initialVar.stock === 0) {
+                if(!initialVar || initialVar.stock === 0) {
                     badgeHTML = `<div class="stock-badge" style="background:var(--gray-text);">Sin Stock</div>`;
                     stockTextHTML = `<div class="stock-display-text" style="color:var(--danger)">Agotado</div>`;
                     btnDisabled = "disabled";
                 } else if(initialVar.stock <= 3) {
                     badgeHTML = `<div class="stock-badge">¡Últimos disponibles!</div>`;
-                    if(showStockNumber) {
-                        stockTextHTML = `<div class="stock-display-text" style="color:var(--danger)">¡Solo quedan ${initialVar.stock} u.!</div>`;
-                    }
+                    if(showStockNumber) stockTextHTML = `<div class="stock-display-text" style="color:var(--danger)">¡Solo quedan ${initialVar.stock} u.!</div>`;
                 } else if(showStockNumber) {
                     stockTextHTML = `<div class="stock-display-text">Disponibles: ${initialVar.stock} u.</div>`;
                 }
@@ -546,7 +720,7 @@
                         </select>
                         ${stockTextHTML}
                         <div class="product-meta">
-                            <span class="product-price">$${initialVar.price.toLocaleString('es-AR')}</span>
+                            <span class="product-price">$${initialVar ? initialVar.price.toLocaleString('es-AR') : '0'}</span>
                             <button class="btn-add" id="btn-add-${p.id}" ${btnDisabled} onclick="addToCart(${p.id})"><i class="fa-solid fa-plus"></i></button>
                         </div>
                     </div>
@@ -583,7 +757,7 @@
             if(stockTextHTML) card.querySelector('.variant-select').insertAdjacentHTML('afterend', stockTextHTML);
         }
 
-        /* OPERACIONES DEL CARRITO */
+        /* OPERACIONES DEL CARRITO INTELIGENTE */
         function addToCart(prodId) {
             const p = products.find(prod => prod.id === prodId);
             const card = document.getElementById(`product-${prodId}`);
@@ -593,13 +767,13 @@
             const cartIndex = cart.findIndex(item => item.id === prodId && item.variantName === variant.name);
 
             if(cartIndex > -1) {
-                if(cart[cartIndex].qty >= variant.stock) return alert("No hay más stock disponible.");
+                if(cart[cartIndex].qty >= variant.stock) return alert("Disculpas, no disponemos de más stock para esta variante.");
                 cart[cartIndex].qty++;
             } else {
                 cart.push({ id: p.id, name: p.name, brand: p.brand, variantName: variant.name, price: variant.price, qty: 1, maxStock: variant.stock });
             }
 
-            localStorage.setItem('huesito_cart', JSON.stringify(cart));
+            localStorage.setItem('huesito_cart_v3', JSON.stringify(cart));
             updateCartBadge(); renderCart();
         }
 
@@ -613,7 +787,7 @@
             container.innerHTML = ""; let total = 0;
 
             if(cart.length === 0) {
-                container.innerHTML = `<p style="text-align:center; color:var(--gray-text); padding:15px;">Tu carrito está vacío.</p>`;
+                container.innerHTML = `<p style="text-align:center; color:var(--gray-text); padding:15px;">Tu carrito está completamente vacío.</p>`;
                 document.getElementById('cart-total').innerText = "Total: $0";
                 return;
             }
@@ -621,15 +795,15 @@
             cart.forEach((item, idx) => {
                 total += item.price * item.qty;
                 container.innerHTML += `
-                    <div class="cart-item" style="display:flex; justify-between; align-items:center; margin-bottom:10px; background:var(--gray); padding:10px; border-radius:10px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; background:var(--gray); padding:12px; border-radius:12px;">
                         <div>
-                            <strong>${item.name}</strong> <small>(${item.variantName})</small>
-                            <div>$${(item.price * item.qty).toLocaleString('es-AR')}</div>
+                            <strong>${item.name}</strong> <small style="color:var(--primary)">(${item.variantName})</small>
+                            <div style="font-size:0.85rem; font-weight:600;">$${(item.price * item.qty).toLocaleString('es-AR')}</div>
                         </div>
-                        <div>
-                            <button onclick="changeQty(${idx}, -1)" style="padding:2px 8px;">-</button>
-                            <span style="margin:0 5px;">${item.qty}</span>
-                            <button onclick="changeQty(${idx}, 1)" style="padding:2px 8px;">+</button>
+                        <div style="display:flex; align-items:center; gap:5px;">
+                            <button onclick="changeQty(${idx}, -1)" style="padding:2px 8px; border-radius:6px; border:1px solid #CBD5E1; cursor:pointer;">-</button>
+                            <span style="font-weight:700; font-size:0.9rem; min-width:15px; text-align:center;">${item.qty}</span>
+                            <button onclick="changeQty(${idx}, 1)" style="padding:2px 8px; border-radius:6px; border:1px solid #CBD5E1; cursor:pointer;">+</button>
                         </div>
                     </div>
                 `;
@@ -640,31 +814,32 @@
         function changeQty(idx, change) {
             cart[idx].qty += change;
             if(cart[idx].qty > cart[idx].maxStock) {
-                alert("Límite físico alcanzado."); cart[idx].qty = cart[idx].maxStock;
+                alert("Límite de existencias físicas alcanzado."); cart[idx].qty = cart[idx].maxStock;
             }
             if(cart[idx].qty <= 0) cart.splice(idx, 1);
-            localStorage.setItem('huesito_cart', JSON.stringify(cart));
+            localStorage.setItem('huesito_cart_v3', JSON.stringify(cart));
             updateCartBadge(); renderCart();
         }
 
+        /* ENVÍO AL WHATSAPP EDITABLE */
         function sendOrder() {
             const name = document.getElementById('order-name').value.trim();
             const address = document.getElementById('order-address').value.trim();
             const payment = document.getElementById('order-payment').value;
 
-            if(!name || !address || cart.length === 0) return alert("Complete los datos de envío.");
+            if(!name || !address || cart.length === 0) return alert("Complete sus datos de entrega e incorpore artículos al carrito.");
 
-            let text = `🐾 *NUEVO PEDIDO - FORRAJERÍA HUESITO* 🐾\n\n`;
-            text += `👤 *Cliente:* ${name}\n📍 *Entrega:* ${address}\n💳 *Pago:* ${payment}\n\n📦 *Detalle:*\n`;
+            let text = `🐾 *NUEVO PEDIDO - ${storeConfig.title.toUpperCase()}* 🐾\n\n`;
+            text += `👤 *Cliente:* ${name}\n📍 *Dirección:* ${address}\n💳 *Método de Pago:* ${payment}\n\n📦 *Productos:*\n`;
 
             let total = 0;
             cart.forEach(item => {
                 total += item.price * item.qty;
                 text += `- ${item.name} (${item.variantName}) x${item.qty} : $${(item.price * item.qty).toLocaleString('es-AR')}\n`;
             });
-            text += `\n💰 *TOTAL: $${total.toLocaleString('es-AR')}*`;
+            text += `\n💰 *TOTAL DEL PEDIDO: $${total.toLocaleString('es-AR')}*`;
             
-            // Simulación de resta de stock local
+            // Resta real de stock en la persistencia local
             cart.forEach(item => {
                 let p = products.find(prod => prod.id === item.id);
                 if(p) {
@@ -672,50 +847,53 @@
                     if(v) v.stock = Math.max(0, v.stock - item.qty);
                 }
             });
-            localStorage.setItem('huesito_products_v2', JSON.stringify(products));
+            localStorage.setItem('huesito_products_v3', JSON.stringify(products));
 
-            cart = []; localStorage.removeItem('huesito_cart');
+            cart = []; localStorage.removeItem('huesito_cart_v3');
             updateCartBadge(); toggleModal('cart-modal'); renderCatalog();
-            window.open(`https://wa.me/5493435088057?text=${encodeURIComponent(text)}`);
+            
+            // Abre el chat utilizando el teléfono configurado dinámicamente en el panel
+            window.open(`https://wa.me/${storeConfig.phone}?text=${encodeURIComponent(text)}`);
         }
 
-        /* RENDERS AUXILIARES DEL PANEL DE ACCIÓN */
+        /* RENDERIZADORES COMPLEMENTARIOS DEL PANEL */
         function renderAdminProducts() {
             const container = document.getElementById('admin-products-list'); container.innerHTML = "";
             products.forEach(p => {
-                container.innerHTML += `<div class="admin-item"><span>${p.name}</span><button class="btn-del" onclick="deleteProduct(${p.id})"><i class="fa-solid fa-trash"></i></button></div>`;
+                container.innerHTML += `<div class="admin-item"><span>${p.name} (${p.brand})</span><button class="btn-del" onclick="deleteProduct(${p.id})"><i class="fa-solid fa-trash"></i></button></div>`;
             });
         }
 
         function deleteProduct(id) {
-            if(confirm("¿Eliminar este producto?")) {
+            if(confirm("¿Estás seguro de eliminar este artículo del catálogo?")) {
                 products = products.filter(p => p.id !== id);
-                localStorage.setItem('huesito_products_v2', JSON.stringify(products));
+                localStorage.setItem('huesito_products_v3', JSON.stringify(products));
                 renderCatalog(); renderAdminProducts();
             }
         }
 
         function renderAdminCategories() {
-            const container = document.getElementById('admin-categories-list'); container.innerHTML = "";Object.keys(categories).forEach(cat => {
+            const container = document.getElementById('admin-categories-list'); container.innerHTML = "";
+            Object.keys(categories).forEach(cat => {
                 container.innerHTML += `<div class="admin-item" style="background:#CBD5E1;"><strong>${cat}</strong><button class="btn-del" onclick="deleteCategory('${cat}')"><i class="fa-solid fa-trash"></i></button></div>`;
                 categories[cat].forEach(sub => {
-                    container.innerHTML += `<div class="admin-item" style="margin-left:20px; font-size:0.8rem;"><span>↳ ${sub}</span><button class="btn-del" onclick="deleteSubCategory('${cat}', '${sub}')"><i class="fa-solid fa-xmark"></i></button></div>`;
+                    container.innerHTML += `<div class="admin-item" style="margin-left:20px; font-size:0.8rem; background:#E2E8F0;"><span>↳ ${sub}</span><button class="btn-del" onclick="deleteSubCategory('${cat}', '${sub}')"><i class="fa-solid fa-xmark"></i></button></div>`;
                 });
             });
         }
 
         function deleteCategory(cat) {
-            if(confirm(`¿Eliminar la categoría "${cat}"?`)) {
-                delete categories[cat]; localStorage.setItem('huesito_categories_v2', JSON.stringify(categories));
+            if(confirm(`¿Deseas eliminar la categoría entera "${cat}"?`)) {
+                delete categories[cat]; localStorage.setItem('huesito_categories_v3', JSON.stringify(categories));
                 currentMainFilter = 'Todos'; currentSubFilter = 'Todos';
                 renderFilters(); renderAdminSelects(); renderAdminCategories(); renderCatalog();
             }
         }
 
         function deleteSubCategory(cat, sub) {
-            if(confirm(`¿Eliminar la opción "${sub}" de ${cat}?`)) {
+            if(confirm(`¿Deseas remover la subcategoría "${sub}" de ${cat}?`)) {
                 categories[cat] = categories[cat].filter(s => s !== sub);
-                localStorage.setItem('huesito_categories_v2', JSON.stringify(categories));
+                localStorage.setItem('huesito_categories_v3', JSON.stringify(categories));
                 currentSubFilter = 'Todos'; renderFilters(); renderAdminCategories(); renderCatalog();
             }
         }
@@ -724,4 +902,3 @@
     </script>
 </body>
 </html>
-          
