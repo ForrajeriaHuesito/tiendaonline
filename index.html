@@ -4,421 +4,315 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forrajería Huesito - Tienda Oficial</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-primary: #f8fafc;
+            --primary: #f2994a;
+            --primary-dark: #e08532;
+            --secondary: #2f80ed;
+            --background: #f8f9fa;
             --surface: #ffffff;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --brand: #f97316;
-            --brand-dim: #ffedd5;
-            --brand-dark: #ea580c;
-            --accent: #3b82f6;
-            --danger: #ef4444;
-            --danger-dim: #fee2e2;
-            --success: #22c55e;
-            --border: #e2e8f0;
-            --radius-lg: 16px;
-            --radius-md: 12px;
-            --radius-sm: 8px;
-            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
-            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --text: #333333;
+            --text-muted: #666666;
+            --border: #e0e0e0;
+            --radius: 12px;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            --danger: #eb5757;
+            --success: #27ae60;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            background-color: var(--bg-primary);
-            color: var(--text-main);
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.5;
             padding-bottom: 100px;
-            min-height: 100vh;
         }
 
-        /* Header & Navigation */
         header {
             background-color: var(--surface);
-            border-bottom: 1px solid var(--border);
-            sticky: top;
+            box-shadow: var(--shadow);
+            padding: 1rem;
             position: sticky;
             top: 0;
-            z-index: 40;
-            box-shadow: var(--shadow);
-        }
-
-        .header-container {
+            z-index: 100;
+        }.header-container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 1rem 1.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .brand-info {
+        .brand {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 0.75rem;
         }
 
-        .brand-logo {
-            width: 48px;
-            height: 48px;
+        .brand img {
+            width: 45px;
+            height: 45px;
             object-fit: cover;
-            border-radius: var(--radius-sm);
+            border-radius: 50%;
         }
 
-        .brand-text h1 {
+        .brand h1 {
             font-size: 1.25rem;
+            color: var(--text);
             font-weight: 700;
-            color: var(--text-main);
-        }
-
-        .brand-text p {
-            font-size: 0.85rem;
-            color: var(--text-muted);
         }
 
         .admin-trigger {
             background: none;
             border: none;
             color: var(--text-muted);
-            opacity: 0.4;
             font-size: 0.85rem;
             cursor: pointer;
-            transition: opacity 0.2s;
-            padding: 8px;
+            padding: 0.5rem;
+            border-radius: var(--radius);
+            transition: background 0.2s;
         }
 
         .admin-trigger:hover {
-            opacity: 1;
-            color: var(--brand);
+            background: #eee;
         }
 
-        /* Main Layout */
         main {
             max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 1.5rem;
+            margin: 1.5rem auto;
+            padding: 0 1rem;
         }
 
-        /* Search & Filters */
-        .controls-section {
-            background: var(--surface);
-            padding: 1.5rem;
-            border-radius: var(--radius-lg);
+        .search-filter-section {
+            background-color: var(--surface);
+            padding: 1rem;
+            border-radius: var(--radius);
             box-shadow: var(--shadow);
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             display: flex;
             flex-direction: column;
             gap: 1rem;
         }
 
-        @media(min-width: 768px) {
-            .controls-section {
-                flex-direction: row;
-                align-items: center;
-                justify-content: space-between;
-            }
-        }
-
-        .search-wrapper {
-            position: relative;
-            flex: 1;
-            max-width: 500px;
-        }
-
-        .search-input {
+        .search-bar {
             width: 100%;
             padding: 0.75rem 1rem;
             border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            font-size: 0.95rem;
+            border-radius: var(--radius);
+            font-size: 1rem;
             outline: none;
             transition: border-color 0.2s;
         }
 
-        .search-input:focus {
-            border-color: var(--brand);
-        }
-
-        .filter-buttons {
+        .search-bar:focus {
+            border-color: var(--primary);
+        }.filter-buttons {
             display: flex;
             gap: 0.5rem;
             overflow-x: auto;
-            padding-bottom: 4px;
+            scrollbar-width: none;
+        }
+
+        .filter-buttons::-webkit-scrollbar {
+            display: none;
         }
 
         .filter-btn {
-            background: var(--bg-primary);
-            border: 1px solid var(--border);
-            padding: 0.6rem 1.2rem;
-            border-radius: var(--radius-md);
+            background-color: #f0f0f0;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
             font-size: 0.9rem;
-            font-weight: 500;
             cursor: pointer;
             white-space: nowrap;
             transition: all 0.2s;
         }
 
-        .filter-btn:hover {
-            border-color: var(--brand);
-            color: var(--brand);
-        }
-
         .filter-btn.active {
-            background: var(--brand);
-            border-color: var(--brand);
-            color: var(--surface);
+            background-color: var(--primary);
+            color: white;
+            font-weight: 600;
         }
 
-        /* Products Grid */
         .products-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 2rem;
+            gap: 1.5rem;
         }
 
         .product-card {
-            background: var(--surface);
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--border);
-            overflow: hidden;
+            background-color: var(--surface);
+            border-radius: var(--radius);
             box-shadow: var(--shadow);
+            overflow: hidden;
             display: flex;
             flex-direction: column;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: transform 0.2s;
         }
 
         .product-card:hover {
             transform: translateY(-4px);
-            box-shadow: var(--shadow-lg);
         }
 
-        .product-image-container {
-            position: relative;
+        .product-image {
             width: 100%;
-            padding-top: 75%;
-            background: #f1f5f9;
-        }
-
-        .product-img {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            height: 200px;
             object-fit: cover;
+            background-color: #eee;
         }
 
-        .product-badge {
-            position: absolute;
-            top: 12px;
-            left: 12px;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            color: var(--text-main);
-            box-shadow: var(--shadow);
-        }
-
-        .product-content {
-            padding: 1.25rem;
+        .product-info {
+            padding: 1rem;
             display: flex;
             flex-direction: column;
-            flex: 1;
+            flex-grow: 1;
         }
 
         .product-brand {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--text-muted);
-            margin-bottom: 4px;
-            font-weight: 600;
-        }
-
-        .product-title {
+            letter-spacing: 1px;
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }.product-title {
             font-size: 1.1rem;
             font-weight: 600;
-            margin-bottom: 6px;
-            color: var(--text-main);
+            margin-bottom: 0.5rem;
         }
 
         .product-desc {
             font-size: 0.85rem;
             color: var(--text-muted);
-            margin-bottom: 1.25rem;
-            line-height: 1.4;
-        }
-
-        .product-actions {
-            margin-top: auto;
+            margin-bottom: 1rem;
+            flex-grow: 1;
         }
 
         .variation-selector {
             width: 100%;
-            padding: 0.6rem;
+            padding: 0.5rem;
             border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
-            background-color: var(--bg-primary);
-            font-size: 0.9rem;
+            border-radius: var(--radius);
             margin-bottom: 1rem;
-            outline: none;
+            background-color: var(--background);
         }
 
-        .price-buy-row {
+        .product-footer {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-top: auto;
         }
 
         .product-price {
-            font-size: 1.3rem;
+            font-size: 1.25rem;
             font-weight: 700;
-            color: var(--brand-dark);
+            color: var(--text);
         }
 
-        .btn-add-cart {
-            background: var(--brand);
-            color: var(--surface);
+        .btn-add {
+            background-color: var(--primary);
+            color: white;
             border: none;
-            padding: 0.6rem 1.2rem;
-            border-radius: var(--radius-md);
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius);
             font-weight: 600;
             cursor: pointer;
             transition: background 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 6px;
         }
 
-        .btn-add-cart:hover {
-            background: var(--brand-dark);
+        .btn-add:hover {
+            background-color: var(--primary-dark);
         }
 
-        /* Floating Cart Bar */
         .cart-bar {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
-            background: var(--surface);
-            border-top: 1px solid var(--border);
-            box-shadow: 0 -10px 25px -5px rgb(0 0 0 / 0.1);
-            z-index: 50;
-            transform: translateY(100%);
-            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .cart-bar.active {
-            transform: translateY(0);
-        }
-
-        .cart-bar-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 1rem 1.5rem;
+            background-color: var(--surface);
+            box-shadow: 0 -4px 10px rgba(0,0,0,0.1);
+            padding: 1rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            z-index: 90;
+            max-width: 1200px;
+            margin: 0 auto;
+            border-radius: var(--radius) var(--radius) 0 0;
         }
 
-        .cart-summary-text {
+        .cart-info-summary {
             display: flex;
             flex-direction: column;
         }
 
         .cart-count {
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             color: var(--text-muted);
-            font-weight: 500;
         }
 
-        .cart-total {
-            font-size: 1.4rem;
+        .cart-total-value {
+            font-size: 1.3rem;
             font-weight: 700;
-            color: var(--text-main);
+            color: var(--success);
         }
 
-        .btn-checkout {
-            background: var(--success);
-            color: var(--surface);
+        .btn-view-cart {
+            background-color: var(--success);
+            color: white;
             border: none;
-            padding: 0.8rem 1.8rem;
-            border-radius: var(--radius-md);
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius);
             font-weight: 600;
-            font-size: 1rem;
             cursor: pointer;
-            transition: opacity 0.2s;
-        }
-
-        .btn-checkout:hover {
-            opacity: 0.9;
-        }
-
-        /* Modals & Overlays */
-        .modal-overlay {
+        }.modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(4px);
-            z-index: 100;
-            display: none;
-            align-items: center;
+            background: rgba(0,0,0,0.5);
+            display: flex;
             justify-content: center;
+            align-items: center;
+            z-index: 200;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
             padding: 1rem;
-            overflow-y: auto;
         }
 
         .modal-overlay.active {
-            display: flex;
+            opacity: 1;
+            pointer-events: auto;
         }
 
-        .modal-box {
+        .modal-container {
             background: var(--surface);
-            border-radius: var(--radius-lg);
+            border-radius: var(--radius);
             width: 100%;
-            max-width: 650px;
-            max-height: 90vh;
+            max-width: 600px;
+            max-height: 85vh;
             overflow-y: auto;
-            box-shadow: var(--shadow-lg);
-            animation: modalFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        @keyframes modalFadeIn {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+            padding: 1.5rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            position: relative;
         }
 
         .modal-header {
-            padding: 1.25rem 1.5rem;
-            border-bottom: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            position: sticky;
-            top: 0;
-            background: var(--surface);
-            z-index: 10;
-        }
-
-        .modal-title {
-            font-size: 1.25rem;
-            font-weight: 700;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
         }
 
         .modal-close {
@@ -426,267 +320,533 @@
             border: none;
             font-size: 1.5rem;
             cursor: pointer;
-            color: var(--text-muted);
         }
 
-        .modal-body {
-            padding: 1.5rem;
-        }
-
-        /* Form Controls */
         .form-group {
-            margin-bottom: 1.25rem;
+            margin-bottom: 1rem;
         }
 
         .form-group label {
             display: block;
-            font-size: 0.9rem;
             font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: var(--text-main);
+            margin-bottom: 0.25rem;
+            font-size: 0.9rem;
         }
 
         .form-control {
             width: 100%;
-            padding: 0.75rem;
+            padding: 0.6rem 0.75rem;
             border: 1px solid var(--border);
-            border-radius: var(--radius-md);
+            border-radius: var(--radius);
             font-size: 0.95rem;
             outline: none;
-            background: var(--bg-primary);
         }
 
         .form-control:focus {
-            border-color: var(--brand);
-            background: var(--surface);
+            border-color: var(--secondary);
         }
 
-        .form-row-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        .form-row {
+            display: flex;
             gap: 1rem;
-            align-items: flex-end;
         }
 
-        .checkbox-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 5px;
-        }
-
-        .checkbox-label {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            background: var(--bg-primary);
-            padding: 6px 12px;
-            border-radius: var(--radius-sm);
-            border: 1px solid var(--border);
+        .btn-submit {
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius);
+            font-weight: 600;
+            width: 100%;
             cursor: pointer;
-            font-size: 0.85rem !important;
+            margin-top: 1rem;
         }
 
-        .checkbox-label input {
-            accent-color: var(--brand);
-        }
-
-        /* Admin Management Lists */
-        .admin-section-divider {
-            margin: 2rem 0 1rem 0;
+        .admin-product-list {
+            margin-top: 1.5rem;
+            border-top: 2px solid var(--border);
             padding-top: 1rem;
-            border-top: 2px dashed var(--border);
-            font-weight: 700;
-            color: var(--brand-dark);
         }
 
-        .variations-list-builder {
-            background: var(--bg-primary);
-            padding: 1rem;
-            border-radius: var(--radius-md);
-            margin-bottom: 1rem;
-            border: 1px solid var(--border);
-        }
-
-        .variation-entry-row {
+        .admin-product-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: var(--surface);
-            padding: 6px 12px;
-            border-radius: var(--radius-sm);
-            margin-bottom: 6px;
-            font-size: 0.85rem;
-            border: 1px solid var(--border);
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border);
         }
 
-        .btn-remove-var {
-            background: none;
+        .btn-delete {
+            background-color: var(--danger);
+            color: white;
             border: none;
-            color: var(--danger);
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
             cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .cart-item-details h4 {
+            font-size: 0.95rem;
             font-weight: 600;
         }
 
-        /* Cart Rules Alerts */
-        .logistic-rule-alert {
-            padding: 0.75rem 1rem;
-            border-radius: var(--radius-md);
+        .cart-item-details p {
             font-size: 0.85rem;
-            font-weight: 500;
+            color: var(--text-muted);
+        }
+
+        .cart-item-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-qty {
+            background-color: #f0f0f0;
+            border: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .logistics-notice {
+            background-color: #fdf2f2;
+            border-left: 4px solid var(--danger);
+            color: #9b1c1c;
+            padding: 0.75rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
             margin-bottom: 1rem;
             display: none;
-            line-height: 1.4;
         }
 
-        .logistic-rule-alert.danger {
-            display: block;
-            background-color: var(--danger-dim);
-            color: var(--danger);
-            border: 1px solid rgba(239, 68, 68, 0.2);
+        .logistics-notice.info {
+            background-color: #f0fdf4;
+            border-left-color: var(--success);
+            color: #14532d;
         }
 
-        .logistic-rule-alert.info {
-            display: block;
-            background-color: #e0f2fe;
-            color: #0369a1;
-            border: 1px solid rgba(59, 130, 246, 0.2);
+        .logistics-notice.warning {
+            background-color: #fffbeb;
+            border-left-color: var(--primary);
+            color: #78350f;
         }
 
-        /* Checkout Summary Table */
-        .checkout-items-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 1.5rem;
-            font-size: 0.9rem;
-        }
-
-        .checkout-items-table th {
-            text-align: left;
-            padding: 8px;
-            color: var(--text-muted);
-            border-bottom: 1px solid var(--border);
-        }
-
-        .checkout-items-table td {
-            padding: 10px 8px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .radio-logistic-option {
-            border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            padding: 1rem;
-            margin-bottom: 0.75rem;
+        .variation-row {
             display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .radio-logistic-option:has(input:checked) {
-            border-color: var(--brand);
-            background-color: var(--brand-dim);
-        }
-
-        .radio-logistic-option input[type="radio"] {
-            margin-top: 3px;
-            accent-color: var(--brand);
-        }
-
-        .radio-logistic-option.disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            background: var(--bg-primary);
-        }
-
-        .btn-submit-order {
-            width: 100%;
-            background: var(--success);
-            color: var(--surface);
-            border: none;
-            padding: 1rem;
-            border-radius: var(--radius-md);
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            margin-top: 1rem;
-        }
-
-        .terms-text {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            text-align: center;
-            margin-top: 1rem;
-            line-height: 1.4;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
         }
     </style>
-</head>
-<body>
+</head><body>
 
     <header>
         <div class="header-container">
-            <div class="brand-info">
-                <img id="dom-logo" src="https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?w=150&auto=format&fit=crop&q=80" alt="Logo" class="brand-logo">
-                <div class="brand-text">
-                    <h1 id="dom-name">Forrajería Huesito</h1>
-                    <p id="dom-slogan">Alimentos y accesorios con amor para tus mascotas</p>
-                </div>
-            </div>
-            <button class="admin-trigger" onclick="openAdminPanel()">⚙️ Panel</button>
+            <div class="brand" id="business-brand-display"></div>
+            <button class="admin-trigger" onclick="tryAccessAdmin()">⚙️ Panel</button>
         </div>
     </header>
 
     <main>
-        <section class="controls-section">
-            <div class="search-wrapper">
-                <input type="text" id="search-input" class="search-input" placeholder="Buscar por nombre o marca..." oninput="handleFilterAndSearch()">
-            </div>
-            <div class="filter-buttons" id="filter-container">
-                <button class="filter-btn active" onclick="setAnimalFilter('todos', this)">Todos</button>
-                <button class="filter-btn" onclick="setAnimalFilter('perro', this)">Perros</button>
-                <button class="filter-btn" onclick="setAnimalFilter('gato', this)">Gatos</button>
-                <button class="filter-btn" onclick="setAnimalFilter('cachorro', this)">Cachorros</button>
+        <section class="search-filter-section">
+            <input type="text" id="search-input" class="search-bar" placeholder="Buscar por nombre, marca o animal...">
+            <div class="filter-buttons">
+                <button class="filter-btn active" onclick="setCategoryFilter('Todos', this)">Todos</button>
+                <button class="filter-btn" onclick="setCategoryFilter('Perro', this)">Perros</button>
+                <button class="filter-btn" onclick="setCategoryFilter('Gato', this)">Gatos</button>
+                <button class="filter-btn" onclick="setCategoryFilter('Cachorro', this)">Cachorros</button>
             </div>
         </section>
 
-        <section class="products-grid" id="products-container">
-            </section>
+        <section class="products-grid" id="products-container"></section>
     </main>
 
-    <div class="cart-bar" id="cart-floating-bar">
-        <div class="cart-bar-container">
-            <div class="cart-summary-text">
-                <span class="cart-count" id="cart-count-text">0 productos seleccionados</span>
-                <span class="cart-total" id="cart-total-text">$0.00</span>
-            </div>
-            <button class="btn-checkout" onclick="openCheckoutModal()">Confirmar Pedido 🐾</button>
+    <div class="cart-bar" id="cart-floating-bar" style="display: none;">
+        <div class="cart-info-summary">
+            <span class="cart-count" id="cart-count-text">0 productos</span>
+            <span class="cart-total-value" id="cart-total-text">$0</span>
         </div>
-    </div>
-
-    <div class="modal-overlay" id="admin-modal">
-        <div class="modal-box">
+        <button class="btn-view-cart" onclick="openCartModal()">Ver Pedido 🐾</button>
+    </div><div class="modal-overlay" id="admin-modal">
+        <div class="modal-container">
             <div class="modal-header">
-                <h3 class="modal-title">Panel de Administración Oculto</h3>
+                <h3>Panel de Administración</h3>
                 <button class="modal-close" onclick="closeModal('admin-modal')">&times;</button>
             </div>
-            <div class="modal-body">
-                <form id="admin-settings-form" onsubmit="saveGlobalSettings(event)">
-                    <div class="form-group">
-                        <label>Nombre del Negocio</label>
-                        <input type="text" id="cfg-name" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Slogan</label>
-                        <input type="text" id="cfg-slogan" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label>WhatsApp (Código de país + número sin espacios. Ej: 5493431234567)</label>
-                        <input type="text" id="cfg-phone" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label>URL del Logo de la Tienda</label>
-                        <input type="url" id="cfg-logo" class="form-control" required>
-                    </div>
-                    <button type="submit" class="btn-add-cart" style="background: var
+            
+            <h4>Configuración del Negocio</h4>
+            <div class="form-group">
+                <label>Nombre del Negocio</label>
+                <input type="text" id="cfg-name" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>WhatsApp (Código de país sin + ni espacios)</label>
+                <input type="text" id="cfg-phone" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>URL del Logo</label>
+                <input type="text" id="cfg-logo" class="form-control">
+            </div>
+            <button class="btn-submit" style="background-color: var(--primary); margin-bottom: 2rem;" onclick="saveBusinessConfig()">Guardar Configuración General</button>
+
+            <h4>Agregar Nuevo Producto</h4>
+            <div class="form-group">
+                <label>Nombre del Producto</label>
+                <input type="text" id="prod-name" class="form-control">
+            </div>
+            <div class="form-row">
+                <div class="form-group" style="flex:1;">
+                    <label>Marca</label>
+                    <input type="text" id="prod-brand" class="form-control" placeholder="Ej: Royal Canin">
+                </div>
+                <div class="form-group" style="flex:1;">
+                    <label>Categoría / Animal</label>
+                    <select id="prod-category" class="form-control">
+                        <option value="Perro">Perro</option>
+                        <option value="Gato">Gato</option>
+                        <option value="Cachorro">Cachorro</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Descripción</label>
+                <input type="text" id="prod-desc" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>URL de la Imagen</label>
+                <input type="text" id="prod-img" class="form-control">
+            </div>
+
+            <h5>Variaciones de Venta y Logística</h5>
+            <div id="variations-builder-container">
+                <div class="variation-row">
+                    <input type="text" placeholder="Ej: Bolsa de 10kg" class="form-control var-name" style="flex: 2;">
+                    <input type="number" placeholder="Precio" class="form-control var-price" style="flex: 1;">
+                    <select class="form-control var-logistics" style="flex: 1.2;">
+                        <option value="suelto">Suelto (x Kilo)</option>
+                        <option value="bolsa">Bolsa Cerrada</option>
+                        <option value="ropita">Ropita</option>
+                        <option value="camita">Camita</option>
+                    </select>
+                </div>
+            </div>
+            <button type="button" class="filter-btn" style="margin-top: 0.5rem; background: #e0e0e0;" onclick="addVariationRowInAdmin()">+ Añadir Otra Variación</button>
+            
+            <button class="btn-submit" onclick="createNewProduct()">Crear y Publicar Producto</button>
+
+            <div class="admin-product-list">
+                <h4>Productos Existentes</h4>
+                <div id="admin-products-list-container"></div>
+            </div>
+        </div>
+    </div><div class="modal-overlay" id="cart-modal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3>Detalle de tu Pedido</h3>
+                <button class="modal-close" onclick="closeModal('cart-modal')">&times;</button>
+            </div>
+
+            <div id="cart-items-container"></div>
+
+            <div style="margin: 1.5rem 0; font-size: 1.2rem; font-weight: 700; text-align: right;">
+                Total a pagar: <span id="checkout-total-text" style="color: var(--success);">$0</span>
+            </div>
+
+            <h4>Datos de Entrega y Envío</h4>
+            
+            <div id="notice-withdrawal" class="logistics-notice warning">
+                ⚠️ <strong>Aviso importante:</strong> Por razones estrictas de higiene animal, las camitas y ropitas no tienen cambio ni devolución.
+            </div>
+            <div id="notice-free-disabled" class="logistics-notice">
+                🚫 El envío gratuito de Miércoles y Sábados <strong>no está disponible</strong> porque tu carrito incluye alimento por kilo suelto.
+            </div>
+            <div id="notice-free-enabled" class="logistics-notice info">
+                🎉 ¡Envío sin cargo disponible! Recuerda que se coordina para los días Miércoles o Sábados exclusivamente.
+            </div>
+            <div id="notice-cargo" class="logistics-notice warning">
+                🛵 El costo de envío con cargo se calculará de forma personalizada por WhatsApp según tu ubicación exacta.
+            </div>
+
+            <div class="form-group">
+                <label>Opción de Entrega</label>
+                <select id="shipping-option" class="form-control" onchange="evaluateLogisticsRules()">
+                    <option value="retiro">Retiro en el local (Siempre disponible)</option>
+                    <option value="gratis">Envío gratis (Miércoles y Sábado - No sueltos)</option>
+                    <option value="cargo">Envío con cargo (A calcular según distancia)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Nombre y Apellido</label>
+                <input type="text" id="cust-name" class="form-control" placeholder="Ej: Juan Pérez">
+            </div>
+            <div class="form-group">
+                <label>Teléfono de Contacto</label>
+                <input type="text" id="cust-phone" class="form-control" placeholder="Ej: 3434567890">
+            </div>
+
+            <div class="form-group" id="group-address" style="display: none;">
+                <label>Dirección de Entrega (Obligatorio)</label>
+                <input type="text" id="cust-address" class="form-control" placeholder="Calle, número y barrio">
+            </div>
+            <div class="form-group" id="group-planb" style="display: none;">
+                <label>Plan B: Vecino de confianza en caso de no encontrarte (Obligatorio)</label>
+                <input type="text" id="cust-planb" class="form-control" placeholder="Nombre o Depto del vecino autorizado">
+            </div>
+
+            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 1rem; border-top: 1px solid var(--border); padding-top: 0.5rem;">
+                * Al confirmar el envío, usted declara aceptar que el pedido cumple con los términos informados de no devolución en accesorios específicos si corresponde.
+            </div>
+
+            <button class="btn-submit" style="background-color: var(--success);" onclick="submitOrderToWhatsApp()">Confirmar y Enviar por WhatsApp 🚀</button>
+        </div>
+    </div><script>
+        let businessConfig = {
+            name: "Forrajería Huesito",
+            phone: "5493434000000",
+            logo: "https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?w=150&auto=format&fit=crop&q=60"
+        };
+
+        let initialProducts = [
+            {
+                id: "p1",
+                name: "Alimento Perro Adulto Premium",
+                brand: "Royal Canin",
+                desc: "Nutrición balanceada a medida para perros adultos de razas medianas.",
+                category: "Perro",
+                img: "https://images.unsplash.com/photo-1589924691995-400dc9ecc119?w=500&auto=format&fit=crop&q=80",
+                variations: [
+                    { name: "1 Kilo suelto", price: 1200, logistics: "suelto" },
+                    { name: "Bolsa Cerrada 15kg", price: 16500, logistics: "bolsa" }
+                ]
+            },
+            {
+                id: "p2",
+                name: "Piedras Sanitarias Absorbentes",
+                brand: "AbsorbiCat",
+                desc: "Piedras sanitarias minerales naturales de alta absorción y control de olores.",
+                category: "Gato",
+                img: "https://images.unsplash.com/photo-1608454367599-c1139e64e9a1?w=500&auto=format&fit=crop&q=80",
+                variations: [ { name: "Bolsa de 4kg", price: 2200, logistics: "bolsa" } ]
+            },
+            {
+                id: "p3",
+                name: "Alimento Cachorros Crecimiento Sano",
+                brand: "Pedigree",
+                desc: "Enriquecido con calcio, vitaminas y minerales para un crecimiento óptimo.",
+                category: "Cachorro",
+                img: "https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=500&auto=format&fit=crop&q=80",
+                variations: [
+                    { name: "1 Kilo suelto", price: 950, logistics: "suelto" },
+                    { name: "Bolsa Cerrada 10kg", price: 8900, logistics: "bolsa" }
+                ]
+            },
+            {
+                id: "p4",
+                name: "Camita Almohadón Confort Extremo",
+                brand: "Huesito Desing",
+                desc: "Almohadón lavable, térmico y super acolchado ideal para el descanso de tu mascota.",
+                category: "Perro",
+                img: "https://images.unsplash.com/photo-1541599540903-216a46cc1ad6?w=500&auto=format&fit=crop&q=80",
+                variations: [
+                    { name: "Talle M", price: 7500, logistics: "camita" },
+                    { name: "Talle L", price: 11000, logistics: "camita" }
+                ]
+            }
+        ];
+
+        let products = [];
+        let cart = [];
+        let currentCategoryFilter = "Todos";
+
+        window.addEventListener('DOMContentLoaded', () => {
+            if (localStorage.getItem('huesito_config')) {
+                businessConfig = JSON.parse(localStorage.getItem('huesito_config'));
+            } else {
+                localStorage.setItem('huesito_config', JSON.stringify(businessConfig));
+            }
+
+            if (localStorage.getItem('huesito_products')) {
+                products = JSON.parse(localStorage.getItem('huesito_products'));
+            } else {
+                products = initialProducts;
+                localStorage.setItem('huesito_products', JSON.stringify(products));
+            }
+
+            renderBusinessDisplay();
+            renderCatalog();
+            setupSearchEngine();
+            syncCartSummary();
+        });
+
+        function renderBusinessDisplay() {
+            const display = document.getElementById('business-brand-display');
+            display.innerHTML = `
+                <img src="${businessConfig.logo}" alt="Logo ${businessConfig.name}">
+                <h1>${businessConfig.name}</h1>
+            `;
+            document.getElementById('cfg-name').value = businessConfig.name;
+            document.getElementById('cfg-phone').value = businessConfig.phone;
+            document.getElementById('cfg-logo').value = businessConfig.logo;
+        }
+
+        function tryAccessAdmin() {
+            const pass = prompt("Por favor, ingrese la contraseña de acceso al panel administrativo:");
+            if (pass === "admin123") {
+                openModal('admin-modal');
+                renderAdminProductList();
+            } else if (pass !== null) {
+                alert("Contraseña incorrecta. Acceso denegado.");
+            }
+        }
+
+        function openModal(id) { document.getElementById(id).classList.add('active'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+        function saveBusinessConfig() {
+            businessConfig.name = document.getElementById('cfg-name').value.trim();
+            businessConfig.phone = document.getElementById('cfg-phone').value.trim();
+            businessConfig.logo = document.getElementById('cfg-logo').value.trim();
+            localStorage.setItem('huesito_config', JSON.stringify(businessConfig));
+            renderBusinessDisplay();
+            alert("Configuración comercial guardada con éxito.");
+        }
+
+        function addVariationRowInAdmin() {
+            const container = document.getElementById('variations-builder-container');
+            const newRow = document.createElement('div');
+            newRow.className = 'variation-row';
+            newRow.innerHTML = `
+                <input type="text" placeholder="Ej: Bolsa de 10kg" class="form-control var-name" style="flex: 2;">
+                <input type="number" placeholder="Precio" class="form-control var-price" style="flex: 1;">
+                <select class="form-control var-logistics" style="flex: 1.2;">
+                    <option value="suelto">Suelto (x Kilo)</option>
+                    <option value="bolsa">Bolsa Cerrada</option>
+                    <option value="ropita">Ropita</option>
+                    <option value="camita">Camita</option>
+                </select>
+            `;
+            container.appendChild(newRow);
+        }function createNewProduct() {
+            const name = document.getElementById('prod-name').value.trim();
+            const brand = document.getElementById('prod-brand').value.trim();
+            const category = document.getElementById('prod-category').value;
+            const desc = document.getElementById('prod-desc').value.trim();
+            const img = document.getElementById('prod-img').value.trim();
+
+            if (!name || !brand || !desc) { alert("Completa los campos."); return; }
+
+            const varRows = document.querySelectorAll('.variation-row');
+            let variations = [];
+            varRows.forEach(row => {
+                const vName = row.querySelector('.var-name').value.trim();
+                const vPrice = parseFloat(row.querySelector('.var-price').value);
+                const vLogistics = row.querySelector('.var-logistics').value;
+                if (vName && !isNaN(vPrice)) { variations.push({ name: vName, price: vPrice, logistics: vLogistics }); }
+            });
+
+            if (variations.length === 0) { alert("Agrega una variación válida."); return; }
+
+            products.push({ id: 'prod_' + Date.now(), name, brand, desc, category, img, variations });
+            localStorage.setItem('huesito_products', JSON.stringify(products));
+            renderCatalog(); renderAdminProductList(); alert("Producto creado.");
+        }
+
+        function deleteProduct(id) {
+            if (confirm("¿Eliminar producto?")) {
+                products = products.filter(p => p.id !== id);
+                localStorage.setItem('huesito_products', JSON.stringify(products));
+                cart = cart.filter(item => item.productId !== id);
+                renderCatalog(); renderAdminProductList(); syncCartSummary();
+            }
+        }
+
+        function renderAdminProductList() {
+            const container = document.getElementById('admin-products-list-container');
+            container.innerHTML = '';
+            products.forEach(p => {
+                container.innerHTML += `<div class="admin-product-item"><div><strong>${p.name}</strong></div><button class="btn-delete" onclick="deleteProduct('${p.id}')">Eliminar</button></div>`;
+            });
+        }
+
+        function setupSearchEngine() { document.getElementById('search-input').addEventListener('input', () => { renderCatalog(); }); }
+        function setCategoryFilter(cat, btn) { currentCategoryFilter = cat; document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); renderCatalog(); }
+
+        function renderCatalog() {
+            const container = document.getElementById('products-container'); container.innerHTML = '';
+            const search = document.getElementById('search-input').value.toLowerCase().trim();
+            const filtered = products.filter(p => (currentCategoryFilter === 'Todos' || p.category === currentCategoryFilter) && (p.name.toLowerCase().includes(search) || p.brand.toLowerCase().includes(search)));
+
+            filtered.forEach(p => {
+                let opts = ''; p.variations.forEach((v, i) => { opts += `<option value="${i}">${v.name} — $${v.price}</option>`; });
+                container.innerHTML += `<article class="product-card"><img class="product-image" src="${p.img}"><div class="product-info"><span class="product-brand">${p.brand}</span><h3>${p.name}</h3><p>${p.desc}</p><select class="variation-selector" id="select-var-${p.id}" onchange="updateCardPriceDisplay('${p.id}')">${opts}</select><div class="product-footer"><span class="product-price" id="price-display-${p.id}">$${p.variations[0].price}</span><button class="btn-add" onclick="addProductToCart('${p.id}')">Agregar 🛒</button></div></div></article>`;
+            });
+        }
+
+        function updateCardPriceDisplay(id) { const p = products.find(prod => prod.id === id); const sel = document.getElementById(`select-var-${id}`); document.getElementById(`price-display-${id}`).innerText = `$${p.variations[sel.value].price}`; }
+
+        function addProductToCart(id) {
+            const p = products.find(prod => prod.id === id); const sel = document.getElementById(`select-var-${id}`); const v = p.variations[parseInt(sel.value)];
+            const exist = cart.find(item => item.productId === id && item.variationName === v.name);
+            if (exist) { exist.quantity += 1; } else { cart.push({ productId: id, productName: p.name, brand: p.brand, variationName: v.name, price: v.price, logistics: v.logistics, quantity: 1 }); }
+            syncCartSummary();
+        }
+
+        function changeCartQty(i, amt) { cart[i].quantity += amt; if (cart[i].quantity <= 0) { cart.splice(i, 1); } syncCartSummary(); renderCartModalList(); }
+
+        function syncCartSummary() {
+            const bar = document.getElementById('cart-floating-bar'); if (cart.length === 0) { bar.style.display = 'none'; return; } bar.style.display = 'flex';
+            let q = 0, t = 0; cart.forEach(item => { q += item.quantity; t += (item.price * item.quantity); });
+            document.getElementById('cart-count-text').innerText = `${q} productos`; document.getElementById('cart-total-text').innerText = `$${t}`;
+        }
+
+        function openCartModal() { openModal('cart-modal'); renderCartModalList(); }
+
+        function renderCartModalList() {
+            const container = document.getElementById('cart-items-container'); container.innerHTML = ''; let t = 0;
+            cart.forEach((item, index) => {
+                t += item.price * item.quantity;
+                container.innerHTML += `<div class="cart-item"><div class="cart-item-details"><h4>${item.productName}</h4><p>${item.variationName} - $${item.price}</p></div><div class="cart-item-actions"><button class="btn-qty" onclick="changeCartQty(${index}, -1)">-</button><span>${item.quantity}</span><button class="btn-qty" onclick="changeCartQty(${index}, 1)">+</button></div></div>`;
+            });
+            document.getElementById('checkout-total-text').innerText = `$${t}`; if(cart.length === 0) { closeModal('cart-modal'); } evaluateLogisticsRules();
+        }
+
+        function evaluateLogisticsRules() {
+            if(cart.length === 0) return;
+            let hasSuelto = cart.some(item => item.logistics === 'suelto'), hasAcc = cart.some(item => item.logistics === 'camita' || item.logistics === 'ropita');
+            document.getElementById('notice-withdrawal').style.display = hasAcc ? 'block' : 'none';
+            const sel = document.getElementById('shipping-option'), freeOpt = sel.querySelector('option[value="gratis"]');
+            if (hasSuelto) { freeOpt.disabled = true; document.getElementById('notice-free-enabled').style.display = 'none'; document.getElementById('notice-free-disabled').style.display = 'block'; if(sel.value === 'gratis') sel.value = 'cargo'; } 
+            else { freeOpt.disabled = false; document.getElementById('notice-free-disabled').style.display = 'none'; document.getElementById('notice-free-enabled').style.display = 'block'; }
+            document.getElementById('notice-cargo').style.display = (sel.value === 'cargo') ? 'block' : 'none';
+            document.getElementById('group-address').style.display = (sel.value !== 'retiro') ? 'block' : 'none';
+            document.getElementById('group-planb').style.display = (sel.value === 'gratis') ? 'block' : 'none';
+        }
+
+        function submitOrderToWhatsApp() {
+            const n = document.getElementById('cust-name').value.trim(), p = document.getElementById('cust-phone').value.trim(), m = document.getElementById('shipping-option').value, a = document.getElementById('cust-address').value.trim(), b = document.getElementById('cust-planb').value.trim();
+            if (!n || !p) { alert("Complete Nombre y Teléfono."); return; }
+            if ((m !== 'retiro') && !a) { alert("Dirección requerida."); return; }
+            if (m === 'gratis' && !b) { alert("Plan B requerido."); return; }
+            let ent = m === 'retiro' ? "Retiro en el local" : (m === 'gratis' ? "Envío Gratis" : "Envío con Cargo"), dat = m === 'retiro' ? "N/A" : (m === 'gratis' ? `Dir: ${a} | Plan B: ${b}` : `Dir: ${a}`), lines = "", tot = 0;
+            cart.forEach(item => { tot += (item.price * item.quantity); lines += `${item.quantity} x ${item.productName} (${item.variationName}) -> $${item.price * item.quantity}\n`; });
+            let msg = `🐾 *¡Nuevo Pedido Recibido!*\n*Cliente:* ${n}\n*Contacto:* ${p}\n*Pedido:*\n${lines}*Total:* $${tot}\n*Entrega:* ${ent}\n*Dirección/Vecino:* ${dat}\n\n(El cliente confirma haber leído y aceptado los términos de no devolución).`;
+            window.open(`https://api.whatsapp.com/send?phone=${businessConfig.phone}&text=${encodeURIComponent(msg)}`, '_blank');
+            cart = []; syncCartSummary(); closeModal('cart-modal');
+        }
+    </script>
+</body>
+</html>
