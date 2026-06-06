@@ -360,7 +360,7 @@
             let deliveryCost = method === "cargo" ? 1500 : 0;
             document.getElementById('sum-total').innerText = `$${subtotal + deliveryCost}`;
             validateCartLogistics();
-                    }function sendOrder() {
+        }function sendOrder() {
             if(cart.length === 0) return alert("El carrito está vacío");
             const name = document.getElementById('cust-name').value.trim();
             const address = document.getElementById('cust-address').value.trim();
