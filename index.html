@@ -4,86 +4,76 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forrajería Huesito</title>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --primary: #FF9F1C; --secondary: #2EC4B6; --dark: #011627; --light: #FBFBFF; --gray: #Eef2f5; }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-        body { background-color: var(--light); padding-bottom: 60px; }
-        .header { background: #fff; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        .search-bar { width: 100%; padding: 15px; border-radius: 25px; border: 2px solid var(--gray); background: var(--gray); font-size: 1rem; margin-top: 10px; }
+        :root { --primary: #FF9F1C; --secondary: #2EC4B6; --dark: #011627; --light: #F7F7F7; }
+        body { font-family: 'Inter', sans-serif; background: var(--light); margin: 0; padding: 0; width: 100%; overflow-x: hidden; }
         
-        /* Barra de filtros horizontal tipo App */
-        .filters-scroll { display: flex; overflow-x: auto; padding: 15px; gap: 10px; background: #fff; border-bottom: 1px solid var(--gray); }
-        .filter-chip { white-space: nowrap; padding: 8px 16px; border-radius: 20px; background: var(--gray); border: none; font-weight: 500; cursor: pointer; }
-        .filter-chip.active { background: var(--primary); color: #fff; }
+        .top-bar { background: #fff; padding: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .top-bar h3 { margin: 0 0 10px 0; color: var(--dark); }
+        .search-container { background: #eee; padding: 10px 15px; border-radius: 8px; display: flex; align-items: center; gap: 10px; }
+        .search-container input { border: none; background: transparent; width: 100%; outline: none; font-size: 1rem; }
         
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; padding: 15px; }
-        .card { background: #fff; border-radius: 15px; padding: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .card img { width: 100%; height: 120px; object-fit: cover; border-radius: 10px; }
-        .card h4 { font-size: 0.9rem; margin: 8px 0; }
-        .btn-panel { position: fixed; bottom: 20px; right: 20px; background: var(--dark); color: #fff; width: 50px; height: 50px; border-radius: 50%; border: none; font-size: 1.2rem; }
-    </style>
-</head><body>
-    <header class="header">
-        <h2 style="color:var(--primary)">Forrajería Huesito</h2>
-        <input type="text" id="search-input" class="search-bar" placeholder="Buscar alimento o mascota...">
-    </header>
+        .filter-scroll { display: flex; overflow-x: auto; padding: 15px; gap: 10px; background: #fff; border-bottom: 1px solid #ddd; white-space: nowrap; -webkit-overflow-scrolling: touch; }
+        .filter-btn { padding: 8px 18px; border-radius: 20px; border: 1px solid #ddd; background: #fff; font-size: 0.85rem; cursor: pointer; flex-shrink: 0; }
+        .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }</style>
+</head>
+<body>
 
-    <div class="filters-scroll" id="filter-bar">
+    <div class="top-bar">
+        <h3>Forrajería Huesito</h3>
+        <div class="search-container">
+            <i class="fa fa-search"></i>
+            <input type="text" id="search" placeholder="¿Qué buscas hoy?" oninput="filter()">
         </div>
+    </div>
 
-    <main class="grid" id="product-grid">
-        </main>
+    <div class="filter-scroll" id="filters">
+        <button class="filter-btn active" onclick="setActive(this, 'Todos')">Todos</button>
+        <button class="filter-btn" onclick="setActive(this, 'Perro')">Perro</button>
+        <button class="filter-btn" onclick="setActive(this, 'Gato')">Gato</button>
+        <button class="filter-btn" onclick="setActive(this, 'Premium')">Premium</button>
+    </div>
 
-    <button class="btn-panel" onclick="openAdmin()"><i class="fa-solid fa-gear"></i></button>
+    <div class="catalog" id="catalog" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 15px;">
+        <!-- Productos aquí -->
+    </div>
 
-    <div id="admin-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:white; padding:20px; z-index:1000;">
-        <h3>Administrar Productos</h3>
-        <button onclick="document.getElementById('admin-modal').style.display='none'">Cerrar</button>
-        <hr>
-    </div><script>
-        const categories = ["Todos", "Perro", "Gato", "Económico", "Premium", "Súper Premium", "Accesorios"];
-        let products = [
-            { name: "Pro Plan Adulto", cat: "Perro", type: "Premium", price: 35000, img: "https://images.unsplash.com/photo-1589924691106-073b19f533ad?w=400" },
-            { name: "Cat Chow Gatitos", cat: "Gato", type: "Económico", price: 1800, img: "https://images.unsplash.com/photo-1569591159212-b02ea8a9f239?w=400" }
+    <script>
+        const products = [
+            { name: "Pro Plan Adulto", cat: "Perro", type: "Premium", price: "$35.000", img: "https://images.unsplash.com/photo-1589924691106-073b19f533ad?w=400" },
+            { name: "Cat Chow Gatitos", cat: "Gato", type: "Económico", price: "$18.000", img: "https://images.unsplash.com/photo-1569591159212-b02ea8a9f239?w=400" }
         ];
 
-        function renderFilters() {
-            const bar = document.getElementById('filter-bar');
-            categories.forEach(c => {
-                const btn = document.createElement('button');
-                btn.className = 'filter-chip';
-                btn.innerText = c;
-                btn.onclick = () => {
-                    document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    filterProducts(c);
-                };
-                bar.appendChild(btn);
-            });
+        let currentCat = 'Todos';
+
+        function setActive(btn, cat) {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentCat = cat;
+            filter();
         }
 
-        function filterProducts(cat) {
-            const search = document.getElementById('search-input').value.toLowerCase();
-            const grid = document.getElementById('product-grid');
-            grid.innerHTML = "";
+        function filter() {
+            const searchTerm = document.getElementById('search').value.toLowerCase();
+            const catalog = document.getElementById('catalog');
+            catalog.innerHTML = "";
             
-            products.filter(p => (cat === "Todos" || p.cat === cat || p.type === cat) && p.name.toLowerCase().includes(search))
-            .forEach(p => {
-                grid.innerHTML += `<div class="card"><img src="${p.img}"><h4>${p.name}</h4><p>$${p.price}</p></div>`;
+            products.filter(p => (currentCat === 'Todos' || p.cat === currentCat || p.type === currentCat) && 
+                                 p.name.toLowerCase().includes(searchTerm)).forEach(p => {
+                catalog.innerHTML += `
+                    <div class="product-card" style="background: #fff; border-radius: 12px; padding: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                        <img src="${p.img}" style="width: 100%; height: 150px; object-fit: cover; border-radius: 8px;">
+                        <h3 style="font-size: 0.9rem; margin: 10px 0; height: 35px; overflow: hidden;">${p.name}</h3>
+                        <div class="price" style="font-weight: bold; font-size: 1.1rem;">${p.price}</div>
+                        <button class="add-btn" style="background: var(--secondary); color: white; border: none; padding: 8px; width: 100%; border-radius: 6px; margin-top: 10px; cursor: pointer;">Agregar</button>
+                    </div>
+                `;
             });
         }
-
-        document.getElementById('search-input').oninput = () => filterProducts(document.querySelector('.filter-chip.active')?.innerText || "Todos");
-
-        function openAdmin() {
-            const pass = prompt("Clave:");
-            if(pass === "admin123") document.getElementById('admin-modal').style.display = 'block';
-        }
-
-        renderFilters();
-        filterProducts("Todos");
+        
+        filter();
     </script>
 </body>
 </html>
