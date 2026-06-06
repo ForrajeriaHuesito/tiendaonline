@@ -4,75 +4,79 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forrajería Huesito</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root { --primary: #FF9F1C; --secondary: #2EC4B6; --dark: #011627; --light: #F7F7F7; }
-        body { font-family: 'Inter', sans-serif; background: var(--light); margin: 0; padding: 0; width: 100%; overflow-x: hidden; }
-        
-        .top-bar { background: #fff; padding: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .top-bar h3 { margin: 0 0 10px 0; color: var(--dark); }
-        .search-container { background: #eee; padding: 10px 15px; border-radius: 8px; display: flex; align-items: center; gap: 10px; }
-        .search-container input { border: none; background: transparent; width: 100%; outline: none; font-size: 1rem; }
-        
-        .filter-scroll { display: flex; overflow-x: auto; padding: 15px; gap: 10px; background: #fff; border-bottom: 1px solid #ddd; white-space: nowrap; -webkit-overflow-scrolling: touch; }
-        .filter-btn { padding: 8px 18px; border-radius: 20px; border: 1px solid #ddd; background: #fff; font-size: 0.85rem; cursor: pointer; flex-shrink: 0; }
-        .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }</style>
+        body { font-family: 'Inter', sans-serif; background: var(--light); margin: 0; padding: 0; }
+        .header { background: #fff; padding: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .search-box { width: 100%; padding: 12px; border-radius: 20px; border: 1px solid #ddd; background: #eee; margin-top: 10px; box-sizing: border-box; }
+        .filter-section { padding: 15px; }
+        .filter-group { display: flex; gap: 10px; margin-bottom: 10px; overflow-x: auto; padding-bottom: 5px; }
+        .chip { padding: 8px 16px; border-radius: 20px; background: #fff; border: 1px solid #ddd; font-size: 0.8rem; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
+        .chip.active { background: var(--primary); color: white; border-color: var(--primary); }
+        .catalog { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 15px; }
+        .product-card { background: #fff; border-radius: 12px; padding: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+    </style>
 </head>
 <body>
-
-    <div class="top-bar">
+    <div class="header">
         <h3>Forrajería Huesito</h3>
-        <div class="search-container">
-            <i class="fa fa-search"></i>
-            <input type="text" id="search" placeholder="¿Qué buscas hoy?" oninput="filter()">
+        <input type="text" id="search" class="search-box" placeholder="Buscar alimento..." oninput="filter()">
+    </div>
+    <div class="filter-section">
+        <div class="filter-group" id="main-filters">
+            <button class="chip active" onclick="selectMain('Todos', this)">Todos</button>
+            <button class="chip" onclick="selectMain('Perro', this)">Perro</button>
+            <button class="chip" onclick="selectMain('Gato', this)">Gato</button>
+            <button class="chip" onclick="selectMain('Aves', this)">Aves</button>
+            <button class="chip" onclick="selectMain('Higiene', this)">Higiene</button>
+            <button class="chip" onclick="selectMain('Accesorios', this)">Accesorios</button>
         </div>
-    </div>
-
-    <div class="filter-scroll" id="filters">
-        <button class="filter-btn active" onclick="setActive(this, 'Todos')">Todos</button>
-        <button class="filter-btn" onclick="setActive(this, 'Perro')">Perro</button>
-        <button class="filter-btn" onclick="setActive(this, 'Gato')">Gato</button>
-        <button class="filter-btn" onclick="setActive(this, 'Premium')">Premium</button>
-    </div>
-
-    <div class="catalog" id="catalog" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 15px;">
-        <!-- Productos aquí -->
-    </div>
-
+        <div class="filter-group" id="sub-filters"></div>
+    </div><div class="catalog" id="catalog"></div>
     <script>
         const products = [
-            { name: "Pro Plan Adulto", cat: "Perro", type: "Premium", price: "$35.000", img: "https://images.unsplash.com/photo-1589924691106-073b19f533ad?w=400" },
-            { name: "Cat Chow Gatitos", cat: "Gato", type: "Económico", price: "$18.000", img: "https://images.unsplash.com/photo-1569591159212-b02ea8a9f239?w=400" }
+            { name: "Nutrique Adulto", cat: "Perro", sub: "Adulto", price: "$28.000" },
+            { name: "Pro Plan Cachorro", cat: "Perro", sub: "Cachorro", price: "$32.000" },
+            { name: "Cat Chow Gatitos", cat: "Gato", sub: "Cachorro", price: "$18.000" },
+            { name: "Aves Ponedora", cat: "Aves", sub: "Ponedora", price: "$12.000" },
+            { name: "Aves Iniciador", cat: "Aves", sub: "Iniciador", price: "$11.000" },
+            { name: "Aves Terminador", cat: "Aves", sub: "Terminador", price: "$10.500" },
+            { name: "Piedras Sanitarias", cat: "Higiene", sub: "Piedras", price: "$8.000" },
+            { name: "Cama Iglú", cat: "Accesorios", sub: "Camitas", price: "$25.000" },
+            { name: "Campera Invierno", cat: "Accesorios", sub: "Ropita", price: "$15.000" }
         ];
 
-        let currentCat = 'Todos';
-
-        function setActive(btn, cat) {
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        let currentMain = 'Todos';
+        let currentSub = 'Todos';function selectMain(cat, btn) {
+            document.querySelectorAll('#main-filters .chip').forEach(c => c.classList.remove('active'));
             btn.classList.add('active');
-            currentCat = cat;
+            currentMain = cat;
+            currentSub = 'Todos';
+            const subContainer = document.getElementById('sub-filters');
+            subContainer.innerHTML = "";
+            const subs = { 'Perro': ['Adulto', 'Cachorro'], 'Gato': ['Adulto', 'Cachorro'], 'Aves': ['Ponedora', 'Iniciador', 'Terminador'], 'Higiene': ['Piedras', 'Limpieza'], 'Accesorios': ['Camitas', 'Ropita'] };
+            if (subs[cat]) {
+                subs[cat].forEach(s => subContainer.innerHTML += `<button class="chip" onclick="selectSub('${s}', this)">${s}</button>`);
+            }
+            filter();
+        }
+
+        function selectSub(sub, btn) {
+            document.querySelectorAll('#sub-filters .chip').forEach(c => c.classList.remove('active'));
+            btn.classList.add('active');
+            currentSub = sub;
             filter();
         }
 
         function filter() {
-            const searchTerm = document.getElementById('search').value.toLowerCase();
+            const term = document.getElementById('search').value.toLowerCase();
             const catalog = document.getElementById('catalog');
             catalog.innerHTML = "";
-            
-            products.filter(p => (currentCat === 'Todos' || p.cat === currentCat || p.type === currentCat) && 
-                                 p.name.toLowerCase().includes(searchTerm)).forEach(p => {
-                catalog.innerHTML += `
-                    <div class="product-card" style="background: #fff; border-radius: 12px; padding: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
-                        <img src="${p.img}" style="width: 100%; height: 150px; object-fit: cover; border-radius: 8px;">
-                        <h3 style="font-size: 0.9rem; margin: 10px 0; height: 35px; overflow: hidden;">${p.name}</h3>
-                        <div class="price" style="font-weight: bold; font-size: 1.1rem;">${p.price}</div>
-                        <button class="add-btn" style="background: var(--secondary); color: white; border: none; padding: 8px; width: 100%; border-radius: 6px; margin-top: 10px; cursor: pointer;">Agregar</button>
-                    </div>
-                `;
+            products.filter(p => (currentMain === 'Todos' || p.cat === currentMain) && (currentSub === 'Todos' || p.sub === currentSub) && p.name.toLowerCase().includes(term))
+            .forEach(p => {
+                catalog.innerHTML += `<div class="product-card"><div style="font-weight:600">${p.name}</div><div style="color:var(--primary); font-weight:bold">${p.price}</div><button style="width:100%; border:none; background:var(--secondary); color:white; border-radius:5px; margin-top:5px">Agregar</button></div>`;
             });
         }
-        
         filter();
     </script>
 </body>
