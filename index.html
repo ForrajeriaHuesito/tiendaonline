@@ -3,81 +3,493 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forrajería Huesito</title>
+    <title>Forrajería Huesito - Tienda de Mascotas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --primary: #FF9F1C; --secondary: #2EC4B6; --dark: #011627; --light: #F7F7F7; }
-        body { font-family: 'Inter', sans-serif; background: var(--light); margin: 0; padding: 0; }
-        .header { background: #fff; padding: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .search-box { width: 100%; padding: 12px; border-radius: 20px; border: 1px solid #ddd; background: #eee; margin-top: 10px; box-sizing: border-box; }
-        .filter-section { padding: 15px; }
-        .filter-group { display: flex; gap: 10px; margin-bottom: 10px; overflow-x: auto; padding-bottom: 5px; }
-        .chip { padding: 8px 16px; border-radius: 20px; background: #fff; border: 1px solid #ddd; font-size: 0.8rem; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
-        .chip.active { background: var(--primary); color: white; border-color: var(--primary); }
-        .catalog { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 15px; }
-        .product-card { background: #fff; border-radius: 12px; padding: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        :root {
+            --primary: #FF9F1C; --primary-hover: #E88F13; --secondary: #2EC4B6; --dark: #011627;
+            --light: #FBFBFF; --white: #FFFFFF; --gray: #F0F2F5; --gray-text: #62727D;
+            --danger: #E71D36; --success: #4CAF50; --radius: 20px;
+            --shadow: 0 8px 24px rgba(1, 22, 39, 0.06);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--light); color: var(--dark); display: flex; flex-direction: column; min-height: 100vh; }
+        h1, h2, h3, .brand-title { font-family: 'Fredoka', sans-serif; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; width: 100%; }
+        
+        .main-header { background: var(--white); box-shadow: 0 2px 10px rgba(0,0,0,0.03); position: sticky; top: 0; z-index: 100; padding: 12px 0; }
+        .header-grid { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+        .brand { display: flex; align-items: center; gap: 12px; }
+        .brand-logo { width: 45px; height: 45px; border-radius: var(--radius); object-fit: cover; background: var(--gray); }
+        .brand-title { color: var(--primary); font-size: 1.4rem; }
+        .brand-sub { font-size: 0.75rem; color: var(--gray-text); text-transform: uppercase; font-weight: 600; }
+        .search-container { flex: 1; max-width: 450px; position: relative; }
+        .search-input { width: 100%; padding: 10px 15px 10px 40px; border: 2px solid var(--gray); border-radius: var(--radius); background: var(--gray); outline: none; }
+        .search-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--gray-text); }
+        .header-actions { display: flex; gap: 10px; }
+        .btn-action { width: 42px; height: 42px; background: var(--gray); border-radius: var(--radius); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; cursor: pointer; border: none; position: relative; }
+        .badge { position: absolute; top: -5px; right: -5px; background: var(--danger); color: var(--white); font-size: 0.7rem; font-weight: 700; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+
+        .banner { background: linear-gradient(135deg, var(--primary) 0%, #FFB74D 100%); border-radius: var(--radius); padding: 30px; color: var(--white); margin: 20px 0; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow); width: 100%; }
+        .banner-text h2 { font-size: 1.8rem; margin-bottom: 5px; }
+        .banner-img { font-size: 4.5rem; opacity: 0.2; margin-right: 20px; }.shop-layout { display: grid; grid-template-columns: 260px 1fr; gap: 25px; margin-bottom: 40px; width: 100%; }
+        .sidebar { background: var(--white); padding: 20px; border-radius: var(--radius); box-shadow: var(--shadow); align-self: start; width: 100%; }
+        .sidebar h3 { font-size: 1.1rem; margin-bottom: 15px; border-bottom: 2px solid var(--gray); padding-bottom: 8px; }
+        .filter-list { display: flex; flex-direction: column; gap: 6px; list-style: none; }
+        .filter-btn { width: 100%; text-align: left; padding: 10px 14px; border-radius: var(--radius); color: var(--gray-text); font-weight: 500; font-size: 0.9rem; border: none; background: transparent; cursor: pointer; }
+        .filter-btn:hover, .filter-btn.active { background: var(--secondary); color: var(--white); }
+        
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; width: 100%; }
+        .product-card { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; display: flex; flex-direction: column; border: 1px solid rgba(0,0,0,0.02); width: 100%; }
+        .product-img-box { width: 100%; padding-top: 85%; position: relative; background: var(--gray); }
+        .product-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
+        .product-info { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; }
+        .product-brand { font-size: 0.7rem; color: var(--gray-text); text-transform: uppercase; font-weight: 700; }
+        .product-name { font-size: 0.95rem; font-weight: 600; margin: 4px 0 10px 0; min-height: 40px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .variant-select { width: 100%; padding: 8px; border: 2px solid var(--gray); border-radius: 10px; background: var(--light); outline: none; margin-bottom: 12px; font-size: 0.85rem; font-weight: 500; }
+        .product-meta { display: flex; align-items: center; justify-content: space-between; margin-top: auto; }
+        .product-price { font-size: 1.25rem; font-weight: 700; color: var(--dark); font-family: 'Fredoka', sans-serif; }
+        .btn-add { background: var(--primary); color: var(--white); width: 36px; height: 36px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1rem; border: none; cursor: pointer; }
+        
+        .about { background: var(--white); padding: 30px; border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 40px; width: 100%; }
+        .about h2 { color: var(--primary); margin-bottom: 10px; font-size: 1.5rem; }
+        .about p { color: var(--gray-text); font-size: 0.95rem; line-height: 1.5; }
+        .footer { background: var(--dark); color: #A0AAB2; padding: 30px 0 15px 0; border-top-left-radius: var(--radius); border-top-right-radius: var(--radius); margin-top: auto; font-size: 0.85rem; width: 100%; }
+        .footer-bottom { text-align: center; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px; font-size: 0.75rem; }
+        
+        /* MODALES */
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(1,22,39,0.4); backdrop-filter: blur(4px); z-index: 200; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; padding: 15px; }
+        .modal.active { opacity: 1; pointer-events: auto; }
+        .modal-content { background: var(--white); padding: 25px; border-radius: var(--radius); width: 100%; max-width: 500px; max-height: 85vh; overflow-y: auto; box-shadow: 0 20px 40px rgba(0,0,0,0.15); position: relative; }
+        .modal-close { position: absolute; top: 15px; right: 15px; font-size: 1.2rem; color: var(--gray-text); cursor: pointer; background: none; border: none; }
+        .modal h2 { font-size: 1.4rem; margin-bottom: 15px; color: var(--dark); display: flex; align-items: center; gap: 10px; }
+        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--gray); gap: 10px; }
+        .cart-item-details { flex-grow: 1; }
+        .cart-item-title { font-size: 0.9rem; font-weight: 600; }
+        .cart-item-sub { font-size: 0.75rem; color: var(--gray-text); }
+        .cart-item-actions { display: flex; align-items: center; gap: 8px; }
+        .btn-qty { width: 24px; height: 24px; background: var(--gray); border-radius: 6px; border: none; font-weight: 600; cursor: pointer; }
+        .cart-alert { background: rgba(231, 29, 54, 0.08); border: 1px solid var(--danger); color: var(--danger); padding: 10px; border-radius: 12px; font-size: 0.8rem; font-weight: 500; margin: 12px 0; display: none; }
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 4px; color: var(--gray-text); }
+        .form-control { width: 100%; padding: 10px; border: 2px solid var(--gray); border-radius: 10px; outline: none; font-size: 0.9rem; }
+        .cart-summary { background: var(--gray); padding: 15px; border-radius: 12px; margin-top: 15px; }
+        .summary-row { display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 6px; }
+        .btn-submit { width: 100%; padding: 12px; background: var(--success); color: var(--white); font-weight: 600; border-radius: 12px; font-size: 1rem; border: none; margin-top: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .admin-section { border-top: 2px solid var(--gray); margin-top: 15px; padding-top: 15px; }
+        .variant-builder-row { display: flex; gap: 6px; margin-bottom: 6px; }
+        .admin-prod-item { display: flex; justify-content: space-between; align-items: center; padding: 8px; background: var(--light); border-radius: 8px; margin-bottom: 6px; font-size: 0.85rem; }
+        .btn-del { color: var(--danger); border: none; background: none; cursor: pointer; }
+
+        /* REGLAS RESPONSIVAS ADAPTADAS */
+        @media (max-width: 768px) {
+            .header-grid { flex-direction: column; align-items: flex-start; gap: 12px; }
+            .search-container { max-width: 100%; width: 100%; }
+            .header-actions { position: absolute; right: 20px; top: 15px; }
+            .shop-layout { grid-template-columns: 1fr; gap: 15px; }
+            .sidebar { padding: 15px; }
+            .sidebar .filter-list { flex-direction: row !important; display: flex !important; overflow-x: auto !important; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; padding-bottom: 10px; gap: 10px; }
+            .filter-list li { list-style: none; display: inline-block; shrink: 0; flex-shrink: 0; }
+            .filter-btn { white-space: nowrap !important; width: auto !important; display: inline-block; background: var(--gray); padding: 8px 16px; }
+            .filter-btn.active { background: var(--secondary); color: var(--white); }
+        }
     </style>
-</head>
-<body>
-    <div class="header">
-        <h3>Forrajería Huesito</h3>
-        <input type="text" id="search" class="search-box" placeholder="Buscar alimento..." oninput="filter()">
-    </div>
-    <div class="filter-section">
-        <div class="filter-group" id="main-filters">
-            <button class="chip active" onclick="selectMain('Todos', this)">Todos</button>
-            <button class="chip" onclick="selectMain('Perro', this)">Perro</button>
-            <button class="chip" onclick="selectMain('Gato', this)">Gato</button>
-            <button class="chip" onclick="selectMain('Aves', this)">Aves</button>
-            <button class="chip" onclick="selectMain('Higiene', this)">Higiene</button>
-            <button class="chip" onclick="selectMain('Accesorios', this)">Accesorios</button>
+</head><body>
+    <div class="app-container">
+        <header class="main-header">
+            <div class="container header-grid">
+                <div class="brand">
+                    <img id="biz-logo" class="brand-logo" src="https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?w=150" alt="Logo">
+                    <div class="brand-text">
+                        <h1 id="biz-name" class="brand-title">Forrajería Huesito</h1>
+                        <p class="brand-sub">Tienda de Mascotas</p>
+                    </div>
+                </div>
+                <div class="search-container">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input type="text" id="search-input" class="search-input" placeholder="Buscar alimentos...">
+                </div>
+                <div class="header-actions">
+                    <button class="btn-action" onclick="openAdmin()"><i class="fa-solid fa-gear"></i></button>
+                    <button class="btn-action" onclick="toggleCart()"><i class="fa-solid fa-shopping-cart"></i><span class="badge" id="cart-count">0</span></button>
+                </div>
+            </div>
+        </header>
+
+        <div class="container">
+            <section class="banner">
+                <div class="banner-text">
+                    <h2 style="margin-top:5px;">Todo para tu mejor amigo</h2>
+                    <p style="font-size:0.9rem; opacity:0.9;">Alimentos balanceados, sueltos y accesorios.</p>
+                </div>
+                <div class="banner-img"><i class="fa-solid fa-dog"></i></div>
+            </section>
+
+            <div class="shop-layout">
+                <aside class="sidebar">
+                    <h3>Categorías</h3>
+                    <ul class="filter-list" id="categories-filter"></ul>
+                </aside>
+                <main><div class="products-grid" id="products-catalog"></div></main>
+            </div>
+
+            <section class="about">
+                <h2>Sobre Nosotros</h2>
+                <p>En Forrajería Huesito nos apasiona el bienestar animal. Alimentos premium por bolsa o fraccionados.</p>
+            </section>
         </div>
-        <div class="filter-group" id="sub-filters"></div>
-    </div><div class="catalog" id="catalog"></div>
+
+        <footer class="footer">
+            <div class="container">
+                <p><i class="fa-solid fa-phone"></i> WhatsApp: <span id="foot-phone"></span></p>
+                <div class="footer-bottom">&copy; 2026 Forrajería Huesito.</div>
+            </div>
+        </footer>
+    </div>
+
+    <div class="modal" id="modal-cart">
+        <div class="modal-content">
+            <button class="modal-close" onclick="toggleCart()">&times;</button>
+            <h2>Tu Carrito</h2>
+            <div id="cart-items-container"></div>
+            <div class="cart-alert" id="cart-logistic-alert">El envío gratis aplica a kilos sueltos llevando una bolsa cerrada.</div>
+            <div class="form-group">
+                <label>Método de Entrega</label>
+                <select class="form-control" id="shipping-select" onchange="validateCartLogistics()">
+                    <option value="retiro">Retiro en el local</option>
+                    <option value="miercoles">Envío Gratis - Miércoles</option>
+                    <option value="sabado">Envío Gratis - Sábado</option>
+                    <option value="cargo">Envío con Cargo</option>
+                </select>
+            </div>
+            <div class="form-group"><label>Nombre</label><input type="text" class="form-control" id="cust-name"></div>
+            <div class="form-group"><label>Dirección</label><input type="text" class="form-control" id="cust-address"></div>
+            <div class="cart-summary">
+                <div class="summary-row"><span>Total:</span><span id="sum-total">$0</span></div>
+            </div>
+            <button class="btn-submit" onclick="sendOrder()"><i class="fa-brands fa-whatsapp"></i> Enviar Pedido</button>
+        </div>
+    </div>
+
+    <div class="modal" id="modal-admin">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeAdmin()">&times;</button>
+            <h2>Configuración</h2>
+            <div class="form-group"><label>Nombre del Negocio</label><input type="text" class="form-control" id="adm-biz-name"></div>
+            <div class="form-group"><label>WhatsApp Internacional</label><input type="text" class="form-control" id="adm-biz-phone"></div>
+            <div class="form-group"><label>Logo URL</label><input type="text" class="form-control" id="adm-biz-logo"></div>
+            <button class="btn-submit" onclick="saveGlobalConfig()">Guardar Configuración</button>
+
+            <div class="admin-section">
+                <h3>Cargar Nuevo Producto</h3>
+                <div class="form-group"><label>Nombre</label><input type="text" class="form-control" id="new-p-name"></div>
+                <div class="form-group"><label>Marca</label><input type="text" class="form-control" id="new-p-brand"></div>
+                <div class="form-group"><label>URL Imagen</label><input type="text" class="form-control" id="new-p-img"></div>
+                <div class="form-group"><label>Categoría</label><select class="form-control" id="new-p-cat"></select></div>
+                <div class="form-group"><label>Descripción</label><input type="text" class="form-control" id="new-p-desc"></div>
+                
+                <label style="font-size:0.8rem; font-weight:600;">Variaciones del Producto</label>
+                <div id="variants-builder-container"></div>
+                <button class="btn-qty" style="width:100%; margin-top:5px; background:var(--gray);" onclick="addVariantRowBuilder()">+ Añadir Variante</button>
+                <button class="btn-submit" style="background:var(--secondary);" onclick="saveNewProduct()">Crear Producto</button>
+            </div>
+            <div class="admin-section">
+                <h3>Listado de Productos</h3>
+                <div id="admin-products-list"></div>
+            </div>
+        </div>
+    </div>
+
     <script>
-        const products = [
-            { name: "Nutrique Adulto", cat: "Perro", sub: "Adulto", price: "$28.000" },
-            { name: "Pro Plan Cachorro", cat: "Perro", sub: "Cachorro", price: "$32.000" },
-            { name: "Cat Chow Gatitos", cat: "Gato", sub: "Cachorro", price: "$18.000" },
-            { name: "Aves Ponedora", cat: "Aves", sub: "Ponedora", price: "$12.000" },
-            { name: "Aves Iniciador", cat: "Aves", sub: "Iniciador", price: "$11.000" },
-            { name: "Aves Terminador", cat: "Aves", sub: "Terminador", price: "$10.500" },
-            { name: "Piedras Sanitarias", cat: "Higiene", sub: "Piedras", price: "$8.000" },
-            { name: "Cama Iglú", cat: "Accesorios", sub: "Camitas", price: "$25.000" },
-            { name: "Campera Invierno", cat: "Accesorios", sub: "Ropita", price: "$15.000" }
-        ];
+        let config = { name: "Forrajería Huesito", phone: "5493434000000", logo: "https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?w=150" };
+        const categories = ["Todos", "Perro", "Perro Cachorro", "Gato", "Gato Cachorro", "Gallinas / Aves", "Conejos", "Piedras Sanitarias", "Accesorios (Camitas / Ropitas)"];
+        let products = [];
+        let cart = [];
+        let currentCategory = "Todos";
 
-        let currentMain = 'Todos';
-        let currentSub = 'Todos';function selectMain(cat, btn) {
-            document.querySelectorAll('#main-filters .chip').forEach(c => c.classList.remove('active'));
-            btn.classList.add('active');
-            currentMain = cat;
-            currentSub = 'Todos';
-            const subContainer = document.getElementById('sub-filters');
-            subContainer.innerHTML = "";
-            const subs = { 'Perro': ['Adulto', 'Cachorro'], 'Gato': ['Adulto', 'Cachorro'], 'Aves': ['Ponedora', 'Iniciador', 'Terminador'], 'Higiene': ['Piedras', 'Limpieza'], 'Accesorios': ['Camitas', 'Ropita'] };
-            if (subs[cat]) {
-                subs[cat].forEach(s => subContainer.innerHTML += `<button class="chip" onclick="selectSub('${s}', this)">${s}</button>`);
-            }
-            filter();
+        function initApp() {
+            if(!localStorage.getItem('huesito_config')) { localStorage.setItem('huesito_config', JSON.stringify(config)); } 
+            else { config = JSON.parse(localStorage.getItem('huesito_config')); }
+
+            const defaultProducts = [
+                { id: 1, name: "Nutrique Perro Adulto", brand: "Nutrique", cat: "Perro", desc: "Nutrición natural", img: "https://images.unsplash.com/photo-1589924691106-073b19f533ad?w=400", variants: [{name: "Bolsa 15 Kg", price: 28000, logistics: "bolsa"}, {name: "X Kilo Suelto", price: 2100, logistics: "suelto"}] },
+                { id: 2, name: "Cat Chow Gatitos", brand: "Purina", cat: "Gato Cachorro", desc: "Defensas activas", img: "https://images.unsplash.com/photo-1569591159212-b02ea8a9f239?w=400", variants: [{name: "X Kilo Suelto", price: 1800, logistics: "suelto"}, {name: "Bolsa 8 Kg", price: 13500, logistics: "bolsa"}] }
+            ];
+
+            if(!localStorage.getItem('huesito_products')) { products = defaultProducts; localStorage.setItem('huesito_products', JSON.stringify(products)); } 
+            else { products = JSON.parse(localStorage.getItem('huesito_products')); }
+
+            document.getElementById('biz-name').innerText = config.name;
+            document.getElementById('biz-logo').src = config.logo;
+            document.getElementById('foot-phone').innerText = "+" + config.phone;
+            renderFilters(); renderCatalog(); populateCategorySelects();
         }
 
-        function selectSub(sub, btn) {
-            document.querySelectorAll('#sub-filters .chip').forEach(c => c.classList.remove('active'));
-            btn.classList.add('active');
-            currentSub = sub;
-            filter();
-        }
-
-        function filter() {
-            const term = document.getElementById('search').value.toLowerCase();
-            const catalog = document.getElementById('catalog');
-            catalog.innerHTML = "";
-            products.filter(p => (currentMain === 'Todos' || p.cat === currentMain) && (currentSub === 'Todos' || p.sub === currentSub) && p.name.toLowerCase().includes(term))
-            .forEach(p => {
-                catalog.innerHTML += `<div class="product-card"><div style="font-weight:600">${p.name}</div><div style="color:var(--primary); font-weight:bold">${p.price}</div><button style="width:100%; border:none; background:var(--secondary); color:white; border-radius:5px; margin-top:5px">Agregar</button></div>`;
+        function renderFilters() {
+            const container = document.getElementById('categories-filter');
+            container.innerHTML = "";
+            categories.forEach(cat => {
+                const li = document.createElement('li');
+                const activeClass = currentCategory === cat ? 'active' : '';
+                li.innerHTML = `<button class="filter-btn ${activeClass}" onclick="setCategory('${cat}')">${cat}</button>`;
+                container.appendChild(li);
             });
         }
-        filter();
+
+        function setCategory(cat) {
+            currentCategory = cat;
+            renderFilters();
+            renderCatalog();
+        }
+
+        document.getElementById('search-input').addEventListener('input', renderCatalog);
+
+        function renderCatalog() {
+            const container = document.getElementById('products-catalog');
+            container.innerHTML = "";
+            const search = document.getElementById('search-input').value.toLowerCase();
+
+            const filtered = products.filter(p => {
+                const matchesCat = (currentCategory === "Todos" || p.cat === currentCategory);
+                const matchesSearch = (p.name.toLowerCase().includes(search) || p.brand.toLowerCase().includes(search));
+                return matchesCat && matchesSearch;
+            });
+
+            if(filtered.length === 0) {
+                container.innerHTML = `<p style="grid-column:1/-1; text-align:center; color:var(--gray-text); padding:20px;">No hay productos en esta categoría.</p>`;
+                return;
+            }
+
+            filtered.forEach(p => {
+                const card = document.createElement('div');
+                card.className = "product-card";
+                let selectHtml = `<select class="variant-select" id="sel-${p.id}" onchange="updateCardPrice(${p.id})">`;
+                p.variants.forEach((v, idx) => { selectHtml += `<option value="${idx}">${v.name} - $${v.price}</option>`; });
+                selectHtml += `</select>`;
+
+                card.innerHTML = `
+                    <div class="product-img-box"><img class="product-img" src="${p.img}" alt="${p.name}"></div>
+                    <div class="product-info">
+                        <span class="product-brand">${p.brand}</span>
+                        <h4 class="product-name">${p.name}</h4>
+                        ${selectHtml}
+                        <div class="product-meta">
+                            <span class="product-price" id="price-${p.id}">$${p.variants[0].price}</span>
+                            <button class="btn-add" onclick="addToCartClick(${p.id})"><i class="fa-solid fa-plus"></i></button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function updateCardPrice(id) {
+            const product = products.find(p => p.id === id);
+            const select = document.getElementById(`sel-${id}`);
+            document.getElementById(`price-${id}`).innerText = `$${product.variants[select.value].price}`;
+        }
+
+        function toggleCart() {
+            document.getElementById('modal-cart').classList.toggle('active');
+            if(document.getElementById('modal-cart').classList.contains('active')) { renderCart(); }
+        }
+
+        function addToCartClick(productId) {
+            const product = products.find(p => p.id === productId);
+            const select = document.getElementById(`sel-${productId}`);
+            const variant = product.variants[parseInt(select.value)];
+
+            const existing = cart.find(item => item.productId === productId && item.variantName === variant.name);
+            if(existing) { existing.qty++; } 
+            else {
+                cart.push({
+                    productId: product.id, name: product.name, brand: product.brand, category: product.cat, variantName: variant.name, price: variant.price, logistics: variant.logistics, qty: 1
+                });
+            }
+            updateCartBadge();
+        }
+
+        function updateCartBadge() {
+            document.getElementById('cart-count').innerText = cart.reduce((acc, item) => acc + item.qty, 0);
+        }
+
+        function changeQty(index, amt) {
+            cart[index].qty += amt;
+            if(cart[index].qty <= 0) { cart.splice(index, 1); }
+            updateCartBadge(); renderCart();
+        }
+
+        function validateCartLogistics() {
+            const shippingSelect = document.getElementById('shipping-select');
+            const alertBox = document.getElementById('cart-logistic-alert');
+            const method = shippingSelect.value;
+
+            let hasBolsa = cart.some(item => item.logistics === "bolsa");
+            let hasSuelto = cart.some(item => item.logistics === "suelto");
+
+            if((method === "miercoles" || method === "sabado") && hasSuelto && !hasBolsa) {
+                alertBox.style.display = "block";
+                shippingSelect.value = "cargo";
+                alert("¡Regla de Envío! Para obtener envío gratuito en alimentos sueltos, debe agregar al menos una bolsa cerrada en el mismo pedido.");
+                renderCart();
+                return false;
+            } else {
+                alertBox.style.display = "none";
+                return true;
+            }
+        }
+
+        function renderCart() {
+            const container = document.getElementById('cart-items-container');
+            container.innerHTML = "";
+            if(cart.length === 0) {
+                container.innerHTML = `<p style="text-align:center; color:var(--gray-text); padding:15px;">Carrito vacío.</p>`;
+                document.getElementById('sum-total').innerText = "$0";
+                return;
+            }
+
+            let subtotal = 0;
+            cart.forEach((item, idx) => {
+                subtotal += item.price * item.qty;
+                const row = document.createElement('div');
+                row.className = "cart-item";
+                row.innerHTML = `
+                    <div class="cart-item-details">
+                        <p class="cart-item-title">${item.name}</p>
+                        <p class="cart-item-sub">${item.variantName} x${item.qty}</p>
+                    </div>
+                    <div class="cart-item-actions">
+                        <button class="btn-qty" onclick="changeQty(${idx}, -1)">-</button>
+                        <button class="btn-qty" onclick="changeQty(${idx}, 1)">+</button>
+                    </div>
+                `;
+                container.appendChild(row);
+            });
+
+            const method = document.getElementById('shipping-select').value;
+            let deliveryCost = method === "cargo" ? 1500 : 0;
+            document.getElementById('sum-total').innerText = `$${subtotal + deliveryCost}`;
+            validateCartLogistics();
+        }
+
+        function sendOrder() {
+            if(cart.length === 0) return alert("El carrito está vacío");
+            const name = document.getElementById('cust-name').value.trim();
+            const address = document.getElementById('cust-address').value.trim();
+            const method = document.getElementById('shipping-select').value;
+
+            if(!name || !address) return alert("Por favor complete Nombre y Dirección.");
+            if(!validateCartLogistics()) return;
+
+            let methodTxt = { retiro: "Retiro en local", miercoles: "Envío Gratis - Miércoles", sabado: "Envío Gratis - Sábado", cargo: "Envío con Cargo" }[method];
+            let subtotal = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
+            let deliveryCost = method === "cargo" ? 1500 : 0;
+
+            let text = `*NUEVO PEDIDO - FORRAJERÍA HUESITO*\n\n*Cliente:* ${name}\n*Dirección:* ${address}\n*Entrega:* ${methodTxt}\n\n*PRODUCTOS:*\n`;
+            let hasAccesorios = false;
+            cart.forEach((item, idx) => {
+                if(item.category.includes("Accesorios")) hasAccesorios = true;
+                text += `${idx + 1}. ${item.name} (${item.variantName}) x${item.qty} - *$${item.price * item.qty}*\n`;
+            });
+
+            text += `\n*TOTAL GENERAL:* $${subtotal + deliveryCost}\n`;
+            if(hasAccesorios) text += `\n_Aclaración: Acepto los términos de no devolución en accesorios._\n`;
+
+            window.open(`https://api.whatsapp.com/send?phone=${config.phone}&text=${encodeURIComponent(text)}`, '_blank');
+        }
+
+        function openAdmin() {
+            const p = prompt("Ingrese clave de acceso:");
+            if(p === "admin123") {
+                document.getElementById('modal-admin').classList.add('active');
+                loadAdminData();
+            } else if(p !== null) { alert("Clave incorrecta"); }
+        }
+
+        function closeAdmin() { document.getElementById('modal-admin').classList.remove('active'); }
+
+        function loadAdminData() {
+            document.getElementById('adm-biz-name').value = config.name;
+            document.getElementById('adm-biz-phone').value = config.phone;
+            document.getElementById('adm-biz-logo').value = config.logo;
+            document.getElementById('variants-builder-container').innerHTML = "";
+            addVariantRowBuilder(); renderAdminProducts();
+        }
+
+        function populateCategorySelects() {
+            const select = document.getElementById('new-p-cat');
+            select.innerHTML = "";
+            categories.filter(c => c !== "Todos").forEach(c => { select.innerHTML += `<option value="${c}">${c}</option>`; });
+        }
+
+        function addVariantRowBuilder() {
+            const container = document.getElementById('variants-builder-container');
+            const row = document.createElement('div');
+            row.className = "variant-builder-row";
+            row.innerHTML = `
+                <input type="text" placeholder="Variante" class="form-control var-n" style="flex:2;" required>
+                <input type="number" placeholder="$" class="form-control var-p" style="flex:1;" required>
+                <select class="form-control var-l" style="flex:1;"><option value="bolsa">Bolsa</option><option value="suelto">Suelto</option></select>
+                <button class="btn-qty" style="background:var(--danger); color:white;" onclick="this.parentElement.remove()">&times;</button>
+            `;
+            container.appendChild(row);
+        }
+
+        function saveGlobalConfig() {
+            config.name = document.getElementById('adm-biz-name').value.trim();
+            config.phone = document.getElementById('adm-biz-phone').value.trim();
+            config.logo = document.getElementById('adm-biz-logo').value.trim();
+            localStorage.setItem('huesito_config', JSON.stringify(config));
+            initApp(); alert("Configuración guardada.");
+        }
+
+        function saveNewProduct() {
+            const name = document.getElementById('new-p-name').value.trim();
+            const brand = document.getElementById('new-p-brand').value.trim();
+            const img = document.getElementById('new-p-img').value.trim() || "https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?w=200";
+            const cat = document.getElementById('new-p-cat').value;
+            const desc = document.getElementById('new-p-desc').value.trim();
+
+            if(!name || !brand) return alert("Nombre y marca requeridos");
+
+            let variants = [];
+            document.querySelectorAll('.variant-builder-row').forEach(row => {
+                const vn = row.querySelector('.var-n').value.trim();
+                const vp = parseFloat(row.querySelector('.var-p').value);
+                const vl = row.querySelector('.var-l').value;
+                if(vn && !isNaN(vp)) variants.push({ name: vn, price: vp, logistics: vl });
+            });
+
+            if(variants.length === 0) return alert("Añada al menos una variante.");
+
+            products.push({ id: Date.now(), name, brand, img, cat, desc, variants });
+            localStorage.setItem('huesito_products', JSON.stringify(products));
+
+            document.getElementById('new-p-name').value = ""; document.getElementById('new-p-brand').value = ""; document.getElementById('new-p-desc').value = "";
+            document.getElementById('variants-builder-container').innerHTML = ""; addVariantRowBuilder();
+            renderCatalog(); renderAdminProducts(); alert("Producto creado.");
+        }
+
+        function renderAdminProducts() {
+            const container = document.getElementById('admin-products-list');
+            container.innerHTML = "";
+            products.forEach(p => {
+                const div = document.createElement('div'); div.className = "admin-prod-item";
+                div.innerHTML = `<span>${p.name}</span><button class="btn-del" onclick="deleteProduct(${p.id})"><i class="fa-solid fa-trash"></i></button>`;
+                container.appendChild(div);
+            });
+        }
+
+        function deleteProduct(id) {
+            if(confirm("¿Eliminar este producto?")) {
+                products = products.filter(p => p.id !== id);
+                localStorage.setItem('huesito_products', JSON.stringify(products));
+                renderCatalog(); renderAdminProducts();
+            }
+        }
+
+        window.onload = initApp;
     </script>
 </body>
 </html>
